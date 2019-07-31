@@ -4,6 +4,7 @@ scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date
 "A date string with format `Y-m-d`, e.g. `2011-05-23`."
 scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 
+#Arreglar mutation porq cambio la DB
 type Mutation {
     createProject(
         name: String @rules(apply: ["required", "alpha", "max:255"])
@@ -35,31 +36,21 @@ type Mutation {
 }
 
 type Query {
-    users: [User!]! @paginate(type: "paginator" model: "App\\User")
-    user(id: ID @eq): User @find(model: "App\\User")
-
-    projects: [Project!]! @all(model: "App\\Project")
-    projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project")
-    project(project_id: ID! @eq): Project @find(model: "App\\Project")
-}
-type User {
-    id: ID!
-    name: String!
-    email: String!
-    created_at: DateTime!
-    updated_at: DateTime!
+    projects: [Projects!]! @all(model: "App\\Projects")
+    projects_paginator: [Projects]! @paginate(type: "paginator" model: "App\\Projects")
+    project(project_id: ID! @eq): Projects @find(model: "App\\Projects")
 }
 
-type Project {
-    project_id: ID!
+type Projects {
+    id_project: ID!
+    id_parent: Int!
     name: String!
     start_date: Date!
-    closing_date: Date!
+    end_date: Date!
     description: String
-    budget: Int!
-    execution: Int!
-    advance: Int!
-    category: Int!
+    contract_value: Int!
+    expenses: Int!
+    process: Int!
     state: String!
 }
 

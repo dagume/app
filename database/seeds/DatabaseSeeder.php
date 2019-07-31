@@ -14,15 +14,15 @@ class DatabaseSeeder extends Seeder
     {
         $faker = Faker::create();
         foreach (range(1,500) as $index) {
-            DB::table('project')->insert([
+            DB::table('projects')->insert([
+        'id_parent' => $faker->numberBetween(1,20),
         'name' => $faker->unique()->name,
         'start_date' => $faker->dateTimeBetween('-3 years', '-6 months'),
-        'closing_date' => $faker->dateTimeBetween('-6 months', '+2 years'),
+        'end_date' => $faker->dateTimeBetween('-6 months', '+2 years'),
         'description' => $faker->text,
-        'budget' => $faker->numberBetween(1000000,100000000),
-        'execution' => 0,
-        'advance' => 0,
-        'category' => $faker->numberBetween(1,3),
+        'contract_value' => $faker->numberBetween(1000000,100000000),
+        'expenses' => 0,
+        'process' => 0,
         'state' => $faker->randomElement(['proceso', 'finalizado', 'archivado']),
         ]);
         }

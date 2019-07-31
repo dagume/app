@@ -5,25 +5,24 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 
-class Project extends Model
+class Projects extends Model
 {
-    protected  $table= 'project';
+    protected  $table= 'projects';
 
-    protected $primaryKey = 'project_id';
+    protected $primaryKey = 'id_project';
 
     public $timestamps = false;
 
     protected $fillable = [
+        'id_parent',
         'name',
         'start_date',
-        'closing_date',
+        'end_date',
         'description',
-        'budget',
-        'execution',
-        'advance',
-        'category',
+        'contract_value',
+        'expenses',
+        'process',
         'state'
-
     ];
 
 
