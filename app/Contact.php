@@ -4,28 +4,30 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+
 class Contact extends Model
 {
-    protected  $table= 'contact';
+    protected  $table= 'contacts';
 
-    protected $primaryKey = 'contact_id';
+    protected $primaryKey = 'id_contact';
 
     public $timestamps = false;
 
     protected $fillable = [
-        'parent_id',
+        'id_parent_contact',
+        'id_job',
         'type',
         'name',
-        'surname',
-        'document_type',
-        'document_number',
+        'lastname',
+        'identification_type',
+        'identification_number',
         'email',
         'phones',
         'state',
-        'place',
+        'locate',
+        'city',
         'address',
-        'website',
-        'job'
+        'web_site'
     ];
 
     public function contact(){

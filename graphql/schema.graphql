@@ -40,6 +40,8 @@ type Query {
     projects: [Project!]! @all(model: "App\\Project")
     projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project")
     project(id_project: ID! @eq): Project @find(model: "App\\Project")
+    users: [User!]! @all(model: "App\\User")
+    me: User @middleware(checks:["auth:api"]) @auth
 }
 
 type Project {
@@ -52,6 +54,12 @@ type Project {
     contract_value: Int!
     expenses: Int!
     process: Int!
-    state: String!
+    state: String
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
 }
 

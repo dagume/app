@@ -12,6 +12,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+/*
         $faker = Faker::create();
         foreach (range(1,500) as $index) {
             DB::table('projects')->insert([
@@ -26,7 +27,7 @@ class DatabaseSeeder extends Seeder
         'state' => $faker->randomElement(['proceso', 'finalizado', 'archivado']),
         ]);
         }
-/*
+
         $faker = Faker::create();
         foreach (range(1,500) as $index) {
             DB::table('contactos')->insert([
@@ -54,6 +55,6 @@ class DatabaseSeeder extends Seeder
         ]);
         }
 */
-        // $this->call(UsersTableSeeder::class);
+        $this->call(UsersTableSeeder::class);
     }
 }
