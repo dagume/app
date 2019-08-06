@@ -4,7 +4,6 @@ scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date
 "A date string with format `Y-m-d`, e.g. `2011-05-23`."
 scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 
-#TODO: Arreglar mutation porq cambio la DB
 type Mutation {
     createProject(
         id_parent: Int @rules(apply: ["integer"])
@@ -37,7 +36,7 @@ type Mutation {
 }
 
 type Query {
-    projects: [Project!]! @all(model: "App\\Project")
+    projects: [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api"])
     projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project")
     project(id_project: ID! @eq): Project @find(model: "App\\Project")
     users: [User!]! @all(model: "App\\User")
