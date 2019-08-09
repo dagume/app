@@ -25,5 +25,11 @@ class Project extends Model
         'state'
     ];
 
-
+    public function members()
+    {
+        return $this->hasMany(Member::class);
+    }
+    public function project(){
+        return $this-BelongsTo(Project::class, 'id_parent');
+    }
 }

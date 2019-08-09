@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Contact extends Model
 {
@@ -30,7 +30,10 @@ class Contact extends Model
         'web_site'
     ];
 
+    public function members(){
+        return $this-HasMany(Member::class);
+    }
     public function contact(){
-        return $this-BelongsTo(Contact::class);
+        return $this-BelongsTo(Contact::class, 'id_parent_contact');
     }
 }

@@ -9,22 +9,25 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Member extends Model
 {
 
-    protected  $table= 'Members';
+    protected  $table= 'members';
 
-    protected $primaryKey = 'member_id';
+    protected $primaryKey = 'id_member';
 
     public $timestamps = false;
 
     protected $fillable = [
-        'project_id',
-        'contact_id'
+        'id_project',
+        'id_contact',
+        'id_rol',
+        'hours_week',
+        'hours_month'
     ];
 
     public function project(){
-        return $this-BelongsTo(Project::class);
+        return $this-BelongsTo(Project::class, 'id_project');
     }
     public function contact(){
-        return $this-BelongsTo(Contact::class);
+        return $this-BelongsTo(Contact::class,'id_contact');
     }
 
 }
