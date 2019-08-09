@@ -38,7 +38,7 @@ type Mutation {
 type Query {
     projects: [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api"])
     projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project")
-    project(id_project: ID! @eq): Project @find(model: "App\\Project")
+    project(name: String! @eq): Project @find(model: "App\\Project")
     users: [User!]! @all(model: "App\\User")
     me: User @middleware(checks:["auth:api"]) @auth
 }
