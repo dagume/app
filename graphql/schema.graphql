@@ -42,7 +42,7 @@ type Query {
     users: [User!]! @all(model: "App\\User")
     roles: [Role!]! @all(model: "Spatie\\Permission\\Models\\Role")
     me: User @middleware(checks:["auth:api"]) @auth
-}
+} 
 
 type Project {
     id_project: ID!
