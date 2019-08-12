@@ -4,45 +4,16 @@ scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date
 "A date string with format `Y-m-d`, e.g. `2011-05-23`."
 scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 
-type Mutation {
-    createProject(
-        id_parent: Int @rules(apply: ["integer"])
-        name: String @rules(apply: ["required", "alpha", "max:255"])
-        start_date: Date @rules(apply: ["required", "date", "before:tomorrow"])
-        end_date: Date @rules(apply: ["required", "date", "after:tomorrow"])
-        description: String @rules(apply: ["nullable", "string"])
-        contract_value: Int @rules(apply: ["required"])
-        expenses: Int @rules(apply: ["required", "integer"])
-        process: Int @rules(apply: ["required", "integer"])
-        state: String @rules(apply: ["required", "in:proceso,finalizado,archivado"])
-    ): Project @create(model: "App\\Project")
-
-    updateProject(
-        id_project: ID! @rules(apply: ["required"])
-        id_parent: Int @rules(apply: ["integer"])
-        name: String @rules(apply: ["required", "alpha", "max:255"])
-        start_date: Date @rules(apply: ["required", "date", "before:tomorrow"])
-        end_date: Date @rules(apply: ["required", "date", "after:tomorrow"])
-        description: String @rules(apply: ["nullable", "string"])
-        contract_value: Int @rules(apply: ["required"])
-        expenses: Int @rules(apply: ["required", "integer"])
-        process: Int @rules(apply: ["required", "integer"])
-        state: String @rules(apply: ["required", "in:proceso,finalizado,archivado"])
-    ): Project @update(model: "App\\Project")
-
-    deleteProject(
-        id_project: ID! @rules(apply: ["required"])
-    ): Project @delete(model: "App\\Project")
-}
-
 type Query {
     projects: [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api"])
-    projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project")
-    project(name: String! @eq): Project @find(model: "App\\Project")
-    users: [User!]! @all(model: "App\\User")
-    roles: [Role!]! @all(model: "Spatie\\Permission\\Models\\Role")
+    projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") @middleware(checks:["auth:api"])
+    project(name: String! @eq): Project @find(model: "App\\Project") @middleware(checks:["auth:api"])
+    users: [User!]! @all(model: "App\\User") @middleware(checks:["auth:api"])
+    user(name: String! @eq): User @find(model: "App\\User") @middleware(checks:["auth:api"])
     me: User @middleware(checks:["auth:api"]) @auth
-} 
+    roles: [Role!]! @all(model: "Spatie\\Permission\\Models\\Role") @middleware(checks:["auth:api"])
+    permissions: [Permission!]! @all(model: "Spatie\\Permission\\Models\\Permission") @middleware(checks:["auth:api"])
+}
 
 type Project {
     id_project: ID!
@@ -57,12 +28,13 @@ type Project {
     state: String
 }
 
-type User {
-  id: ID!
-  name: String!
-  email: String!
-  roles: [Role]
-  permissions: [Permission]
+input LoginInput {
+    username: String!
+    password: String!
+}
+
+input RefreshTokenInput {
+    refresh_token: String
 }
 
 type Role {
@@ -80,6 +52,77 @@ type Permission {
   guard_name: String!
   created_at: Date!
   updated_at: Date!
+}
+
+type User {
+    id: ID!
+  name: String!
+  email: String!
+  roles: [Role]
+}
+
+type AuthPayload {
+    access_token: String!
+    refresh_token: String!
+    expires_in: Int!
+    token_type: String!
+    user: User!
+}
+
+type RefreshTokenPayload {
+    access_token: String!
+    refresh_token: String!
+    expires_in: Int!
+    token_type: String!
+}
+
+type LogoutResponse {
+    status: String!
+    message: String
+}
+
+type ForgotPasswordResponse {
+    status: String!
+    message: String
+}
+
+input ForgotPasswordInput {
+    email: String!
+}
+
+input NewPasswordWithCodeInput {
+    email: String!
+    token: String!
+    password: String!
+    password_confirmation: String!
+}
+
+
+type Mutation {
+    #Auth
+    login(data: LoginInput): AuthPayload! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\Login@resolve")
+    refreshToken(data: RefreshTokenInput): RefreshTokenPayload! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\RefreshToken@resolve")
+    logout: LogoutResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\Logout@resolve")
+    forgotPassword(data: ForgotPasswordInput!): ForgotPasswordResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\ForgotPassword@resolve")
+    updateForgottenPassword(data: NewPasswordWithCodeInput): ForgotPasswordResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\ResetPassword@resolve")
+    #projects
+    createProject(id_parent: Int @rules(apply: ["integer"]) name: String @rules(apply: ["required", "alpha", "max:255"]) start_date: Date @rules(apply: ["required", "date", "before:tomorrow"]) end_date: Date @rules(apply: ["required", "date", "after:tomorrow"]) description: String @rules(apply: ["nullable", "string"]) contract_value: Int @rules(apply: ["required"]) expenses: Int @rules(apply: ["required", "integer"]) process: Int @rules(apply: ["required", "integer"]) state: String @rules(apply: ["required", "in:proceso,finalizado,archivado"])): Project @create(model: "App\\Project") @middleware(checks:["auth:api"])
+    updateProject(
+        id_project: ID! @rules(apply: ["required"])
+        id_parent: Int @rules(apply: ["integer"])
+        name: String @rules(apply: ["required", "alpha", "max:255"])
+        start_date: Date @rules(apply: ["required", "date", "before:tomorrow"])
+        end_date: Date @rules(apply: ["required", "date", "after:tomorrow"])
+        description: String @rules(apply: ["nullable", "string"])
+        contract_value: Int @rules(apply: ["required"])
+        expenses: Int @rules(apply: ["required", "integer"])
+        process: Int @rules(apply: ["required", "integer"])
+        state: String @rules(apply: ["required", "in:proceso,finalizado,archivado"])
+    ): Project @update(model: "App\\Project") @middleware(checks:["auth:api"])
+
+    deleteProject(
+        id_project: ID! @rules(apply: ["required"])
+    ): Project @delete(model: "App\\Project") @middleware(checks:["auth:api"])
 }
 
 
