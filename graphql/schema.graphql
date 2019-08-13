@@ -8,7 +8,7 @@ type Query {
     projects: [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api"])
     projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") @middleware(checks:["auth:api"])
     project(name: String! @eq): Project @find(model: "App\\Project") @middleware(checks:["auth:api"])
-    users: [User!]! @all(model: "App\\User") @middleware(checks:["auth:api"])
+    users: [User!]! @all(model: "App\\User")
     user(name: String! @eq): User @find(model: "App\\User") @middleware(checks:["auth:api"])
     me: User @middleware(checks:["auth:api"]) @auth
     roles: [Role!]! @all(model: "Spatie\\Permission\\Models\\Role") @middleware(checks:["auth:api"])
@@ -117,6 +117,10 @@ type Mutation {
         contract_value: Int @rules(apply: ["required"])
         expenses: Int @rules(apply: ["required", "integer"])
         process: Int @rules(apply: ["required", "integer"])
+        state: String @rules(apply: ["required", "in:proceso,finalizado,archivado"])
+    ): Project @update(model: "App\\Project") @middleware(checks:["auth:api"])
+    updateStateProject(
+        id_project: ID! @rules(apply: ["required"])
         state: String @rules(apply: ["required", "in:proceso,finalizado,archivado"])
     ): Project @update(model: "App\\Project") @middleware(checks:["auth:api"])
 
