@@ -12,13 +12,9 @@ use Illuminate\Http\Request;
 class RolesController extends Controller
 {
     public function __construct()
-    {
-
-    }
+    {}
     public function index()
     {
-
-
         $role = Role::create(['name' => 'Super Admin']);
         $permission1 = Permission::create(['name' => 'agregar proyecto']);
         //$permission1->assignRole($role);
@@ -28,7 +24,5 @@ class RolesController extends Controller
         //$role = DB::table('roles')->where('id',"=","1")->get();
         //$permission = DB::table('permissions')->where('id',"=","1")->get();
         //$permission->assignRole($role);
-
     }
-
 }

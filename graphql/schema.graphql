@@ -3,27 +3,94 @@ scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date
 
 "A date string with format `Y-m-d`, e.g. `2011-05-23`."
 scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
-#
+
 type Query {
+    #prjects
     projects: [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api","permission:listar proyectos"])
     projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") @middleware(checks:["auth:api","permission:listar proyectos"])
     project(name: String! @eq): Project @find(model: "App\\Project") @middleware(checks:["auth:api","permission:buscar proyecto"])
-
+    #users
     users: [User!]! @all(model: "App\\User")
     user(name: String! @eq): User @find(model: "App\\User") @middleware(checks:["auth:api"])
 
     me: User @middleware(checks:["auth:api"]) @auth
+    #roles y permissions
     roles: [Role!]! @all(model: "Spatie\\Permission\\Models\\Role") @middleware(checks:["auth:api"])
     permissions: [Permission!]! @all(model: "Spatie\\Permission\\Models\\Permission") @middleware(checks:["auth:api"])
+    #Contacts
+    contacts: [Contact!]! @all(model: "App\\Contact") @middleware(checks:["auth:api","permission:listar contactos"])
+    contacts_paginator: [Contact]! @paginate(type: "paginator" model: "App\\Contact") @middleware(checks:["auth:api","permission:listar contactos"])
+    contact(name: String! @eq): Contact @find(model: "App\\Contact") @middleware(checks:["auth:api","permission:buscar contacto"])
+
 }
+#tipos de contacto
+enum contactType{
+    persona @enum(value: 2)
+    empresa @enum(value: 3)
+}
+enum contactIdType{
+    cedula @enum(value: 1)
+    nit @enum(value: 2)
+    pasaporte @enum(value: 3)
+    cedula extranjera @enum(value: 4)
+}
+interface Contact{
+    id_contact:ID!
+    type:contactType!
+    name:String!
+    identification_type:contactIdType!
+    identification_number:Int!
+    email:String!
+    phones:String!
+    state:Int!
+    address:String
+    web_site:String
+}
+
+type Person implements Contact{
+    id_contact:ID!
+    id_parent_contact:Int
+    id_job:Int
+    type:contactType!
+    name:String!
+    lastname:String
+    identification_type:contactIdType!
+    identification_number:Int!
+    email:String!
+    phones:String!
+    state:Int!
+    address:String
+    web_site:String
+}
+
+type Company implements Contact{
+    id_contact:ID!
+    type:contactType!
+    name:String!
+    identification_type:contactIdType!
+    identification_number:Int!
+    email:String!
+    phones:String!
+    state:Int!
+    locate:String
+    city:String
+    address:String
+    web_site:String
+}
+
 enum statesProject {
     proceso
     finalizado
     archivado
 }
+enum categoryProject {
+    estudioSuelo @enum(value: 1)
+    obraCivil @enum(value: 2)
+}
+
 type Project {
     id_project: ID!
-    id_parent: Int!
+    id_parent: categoryProject!
     name: String!
     start_date: Date!
     end_date: Date!
@@ -32,15 +99,6 @@ type Project {
     expenses: Int!
     process: Int!
     state: String
-}
-
-input LoginInput {
-    username: String!
-    password: String!
-}
-
-input RefreshTokenInput {
-    refresh_token: String
 }
 
 type Role {
@@ -65,6 +123,15 @@ type User {
   name: String!
   email: String!
   roles: [Role]
+}
+
+input LoginInput {
+    username: String!
+    password: String!
+}
+
+input RefreshTokenInput {
+    refresh_token: String
 }
 
 type AuthPayload {
@@ -103,6 +170,22 @@ input NewPasswordWithCodeInput {
     password_confirmation: String!
 }
 
+input ContactInput{
+    id_parent_contact: Int @rules(apply: ["integer"])
+    id_job: Int @rules(apply: ["integer"])
+    type: contactType @rules(apply: ["integer"])
+    name: String @rules(apply: ["required", "max:255"])
+    lastname: String @rules(apply: ["required", "max:255"])
+    identification_type: contactIdType @rules(apply: ["required"])
+    identification_number: Int @rules(apply: ["required"])
+    email: String @rules(apply: ["required", "max:255"])
+    phones:String @rules(apply: ["max:30"])
+    state:Int @rules(apply: ["required"])
+    locate:String @rules(apply: ["max:255"])
+    city:String @rules(apply: ["max:255"])
+    address:String @rules(apply: ["max:255"])
+    web_site:String @rules(apply: ["max:255"])
+}
 
 type Mutation {
     #Auth
@@ -112,10 +195,16 @@ type Mutation {
     forgotPassword(data: ForgotPasswordInput!): ForgotPasswordResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\ForgotPassword@resolve")
     updateForgottenPassword(data: NewPasswordWithCodeInput): ForgotPasswordResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\ResetPassword@resolve")
     #projects
-    createProject(id_parent: Int @rules(apply: ["integer"]) name: String @rules(apply: ["required", "alpha", "max:255"]) start_date: Date @rules(apply: ["required", "date", "before:tomorrow"]) end_date: Date @rules(apply: ["required", "date", "after:tomorrow"]) description: String @rules(apply: ["nullable", "string"]) contract_value: Int @rules(apply: ["required"]) expenses: Int @rules(apply: ["required", "integer"]) process: Int @rules(apply: ["required", "integer"]) state: String @rules(apply: ["required", "in:proceso,finalizado,archivado"])): Project @create(model: "App\\Project") @middleware(checks:["auth:api","permission:agregar proyecto"])
-    updateProject(id_project: ID! @rules(apply: ["required"])id_parent: Int @rules(apply: ["integer"])name: String @rules(apply: ["required", "alpha", "max:255"])start_date: Date @rules(apply: ["required", "date", "before:tomorrow"])end_date: Date @rules(apply: ["required", "date", "after:tomorrow"])description: String @rules(apply: ["nullable", "string"])contract_value: Int @rules(apply: ["required"])expenses: Int @rules(apply: ["required", "integer"])process: Int @rules(apply: ["required", "integer"])state: String @rules(apply: ["required", "in:proceso,finalizado,archivado"])): Project @update(model: "App\\Project") @middleware(checks:["auth:api","permission:editar proyecto"])
+    createProject(id_parent: categoryProject @rules(apply: ["integer"]) name: String @rules(apply: ["required", "alpha", "max:255"]) start_date: Date @rules(apply: ["required", "date", "before:tomorrow"]) end_date: Date @rules(apply: ["required", "date", "after:tomorrow"]) description: String @rules(apply: ["nullable", "string"]) contract_value: Int @rules(apply: ["required"]) expenses: Int @rules(apply: ["required", "integer"]) process: Int @rules(apply: ["required", "integer"]) state: String @rules(apply: ["required", "in:proceso,finalizado,archivado"])): Project @create(model: "App\\Project") @middleware(checks:["auth:api","permission:agregar proyecto"])
+    updateProject(id_project: ID! @rules(apply: ["required"])id_parent: categoryProject @rules(apply: ["integer"])name: String @rules(apply: ["required", "alpha", "max:255"])start_date: Date @rules(apply: ["required", "date", "before:tomorrow"])end_date: Date @rules(apply: ["required", "date", "after:tomorrow"])description: String @rules(apply: ["nullable", "string"])contract_value: Int @rules(apply: ["required"])expenses: Int @rules(apply: ["required", "integer"])process: Int @rules(apply: ["required", "integer"])state: String @rules(apply: ["required", "in:proceso,finalizado,archivado"])): Project @update(model: "App\\Project") @middleware(checks:["auth:api","permission:editar proyecto"])
     updateStateProject(id_project: ID! @rules(apply: ["required"]) state: String @rules(apply: ["required", "in:proceso,finalizado,archivado"])): Project @update(model: "App\\Project") @middleware(checks:["auth:api","permission:cambiar estado proyecto"])
     #deleteProject(id_project: ID! @rules(apply: ["required"])): Project @delete(model: "App\\Project") @middleware(checks:["auth:api"])
+    #Contacts
+    createContact(input: ContactInput!): Contact @create(model: "App\\Contact") @middleware(checks:["auth:api","permission:agregar contacto"])
+    #updateProject(id_project: ID! @rules(apply: ["required"])id_parent: Int @rules(apply: ["integer"])name: String @rules(apply: ["required", "alpha", "max:255"])start_date: Date @rules(apply: ["required", "date", "before:tomorrow"])end_date: Date @rules(apply: ["required", "date", "after:tomorrow"])description: String @rules(apply: ["nullable", "string"])contract_value: Int @rules(apply: ["required"])expenses: Int @rules(apply: ["required", "integer"])process: Int @rules(apply: ["required", "integer"])state: String @rules(apply: ["required", "in:proceso,finalizado,archivado"])): Project @update(model: "App\\Project") @middleware(checks:["auth:api","permission:editar proyecto"])
+    #updateStateProject(id_project: ID! @rules(apply: ["required"]) state: String @rules(apply: ["required", "in:proceso,finalizado,archivado"])): Project @update(model: "App\\Project") @middleware(checks:["auth:api","permission:cambiar estado proyecto"])
+
+
 }
 
 
