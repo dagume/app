@@ -3,7 +3,7 @@ scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date
 
 "A date string with format `Y-m-d`, e.g. `2011-05-23`."
 scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
-
+#,"permission:listar projectos"
 type Query {
     projects: [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api"])
     projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") @middleware(checks:["auth:api"])
@@ -14,7 +14,11 @@ type Query {
     roles: [Role!]! @all(model: "Spatie\\Permission\\Models\\Role") @middleware(checks:["auth:api"])
     permissions: [Permission!]! @all(model: "Spatie\\Permission\\Models\\Permission") @middleware(checks:["auth:api"])
 }
-
+enum statesProject {
+    proceso
+    finalizado
+    archivado
+}
 type Project {
     id_project: ID!
     id_parent: Int!
