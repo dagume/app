@@ -18,11 +18,15 @@ type Query {
     roles: [Role!]! @all(model: "Spatie\\Permission\\Models\\Role") @middleware(checks:["auth:api"])
     permissions: [Permission!]! @all(model: "Spatie\\Permission\\Models\\Permission") @middleware(checks:["auth:api"])
     #Contacts
-    contacts: [Contact!]! @all(model: "App\\Contact") @middleware(checks:["auth:api","permission:listar contactos"])
-    contacts_paginator: [Contact]! @paginate(type: "paginator" model: "App\\Contact") @middleware(checks:["auth:api","permission:listar contactos"])
-    contact(name: String! @eq): Contact @find(model: "App\\Contact") @middleware(checks:["auth:api","permission:buscar contacto"])
-
+    #contacts: [Contact!]! @all(model: "App\\Contact") #@interface(resolver: "App\\GraphQL\\Interfaces\\Contact@resolveType") @middleware(checks:["auth:api","permission:listar contactos"])
+    #contacts_paginator: [Contact]! @paginate(type: "paginator" model: "App\\Contact")# @middleware(checks:["auth:api","permission:listar contactos"])
+    #contact(name: String! @eq): Contact @find(model: "App\\Contact")# @middleware(checks:["auth:api","permission:buscar contacto"])
+    #person
+    contacts: [Person!]! @all(model: "App\\Contact")
+    contacts_paginator: [Person]! @paginate(type: "paginator" model: "App\\Contact")
+    contact(name: String! @eq): Person @find(model: "App\\Contact")
 }
+
 #tipos de contacto
 enum contactType{
     persona @enum(value: 2)
@@ -32,22 +36,23 @@ enum contactIdType{
     cedula @enum(value: 1)
     nit @enum(value: 2)
     pasaporte @enum(value: 3)
-    cedula extranjera @enum(value: 4)
+    extranjera @enum(value: 4)
 }
-interface Contact{
-    id_contact:ID!
-    type:contactType!
-    name:String!
-    identification_type:contactIdType!
-    identification_number:Int!
-    email:String!
-    phones:String!
-    state:Int!
-    address:String
-    web_site:String
-}
+##interface Contact{
+##    id_contact:ID!
+##    type:contactType!
+##    name:String!
+##    identification_type:contactIdType!
+##    identification_number:Int!
+##    email:String!
+##    phones:String!
+##    state:Int!
+##    address:String
+##    web_site:String
+##}
 
-type Person implements Contact{
+type Person{ #implements Contact
+
     id_contact:ID!
     id_parent_contact:Int
     id_job:Int
@@ -63,7 +68,7 @@ type Person implements Contact{
     web_site:String
 }
 
-type Company implements Contact{
+type Company{ #implements Contact
     id_contact:ID!
     type:contactType!
     name:String!
@@ -170,22 +175,22 @@ input NewPasswordWithCodeInput {
     password_confirmation: String!
 }
 
-input ContactInput{
-    id_parent_contact: Int @rules(apply: ["integer"])
-    id_job: Int @rules(apply: ["integer"])
-    type: contactType @rules(apply: ["integer"])
-    name: String @rules(apply: ["required", "max:255"])
-    lastname: String @rules(apply: ["required", "max:255"])
-    identification_type: contactIdType @rules(apply: ["required"])
-    identification_number: Int @rules(apply: ["required"])
-    email: String @rules(apply: ["required", "max:255"])
-    phones:String @rules(apply: ["max:30"])
-    state:Int @rules(apply: ["required"])
-    locate:String @rules(apply: ["max:255"])
-    city:String @rules(apply: ["max:255"])
-    address:String @rules(apply: ["max:255"])
-    web_site:String @rules(apply: ["max:255"])
-}
+#input ContactInput{
+#    id_parent_contact: Int @rules(apply: ["integer"])
+#    id_job: Int @rules(apply: ["integer"])
+#    type: contactType @rules(apply: ["integer"])
+#    name: String @rules(apply: ["required", "max:255"])
+#    lastname: String @rules(apply: ["required", "max:255"])
+#    identification_type: contactIdType @rules(apply: ["required"])
+#    identification_number: Int @rules(apply: ["required"])
+#    email: String @rules(apply: ["required", "max:255"])
+#    phones:String @rules(apply: ["max:30"])
+#    state:Int @rules(apply: ["required"])
+#    locate:String @rules(apply: ["max:255"])
+#    city:String @rules(apply: ["max:255"])
+#    address:String @rules(apply: ["max:255"])
+#    web_site:String @rules(apply: ["max:255"])
+#}
 
 type Mutation {
     #Auth
@@ -200,11 +205,68 @@ type Mutation {
     updateStateProject(id_project: ID! @rules(apply: ["required"]) state: String @rules(apply: ["required", "in:proceso,finalizado,archivado"])): Project @update(model: "App\\Project") @middleware(checks:["auth:api","permission:cambiar estado proyecto"])
     #deleteProject(id_project: ID! @rules(apply: ["required"])): Project @delete(model: "App\\Project") @middleware(checks:["auth:api"])
     #Contacts
-    createContact(input: ContactInput!): Contact @create(model: "App\\Contact") @middleware(checks:["auth:api","permission:agregar contacto"])
+    #createContact(input: ContactInput!): Contact @create(model: "App\\Contact") #@middleware(checks:["auth:api","permission:agregar contacto"])
     #updateProject(id_project: ID! @rules(apply: ["required"])id_parent: Int @rules(apply: ["integer"])name: String @rules(apply: ["required", "alpha", "max:255"])start_date: Date @rules(apply: ["required", "date", "before:tomorrow"])end_date: Date @rules(apply: ["required", "date", "after:tomorrow"])description: String @rules(apply: ["nullable", "string"])contract_value: Int @rules(apply: ["required"])expenses: Int @rules(apply: ["required", "integer"])process: Int @rules(apply: ["required", "integer"])state: String @rules(apply: ["required", "in:proceso,finalizado,archivado"])): Project @update(model: "App\\Project") @middleware(checks:["auth:api","permission:editar proyecto"])
     #updateStateProject(id_project: ID! @rules(apply: ["required"]) state: String @rules(apply: ["required", "in:proceso,finalizado,archivado"])): Project @update(model: "App\\Project") @middleware(checks:["auth:api","permission:cambiar estado proyecto"])
+    #Person
+    createPerson(
+        id_parent_contact: Int @rules(apply: ["integer"])
+        id_job: Int @rules(apply: ["integer"])
+        type: contactType @rules(apply: ["integer"])
+        name: String @rules(apply: ["required", "max:255"])
+        lastname: String @rules(apply: ["required", "max:255"])
+        identification_type: contactIdType @rules(apply: ["integer"])
+        identification_number: Int @rules(apply: ["required"])
+        email: String @rules(apply: ["required", "max:255"])
+        phones:String @rules(apply: ["max:30"])
+        state:Int @rules(apply: ["required"])
+        address:String @rules(apply: ["max:255"])
+        web_site:String @rules(apply: ["max:255"])
+    ): Person @create(model: "App\\Contact")
+    updatePerson(
+        id_contact: ID! @rules(apply: ["required"])
+        id_parent_contact: Int @rules(apply: ["integer"])
+        id_job: Int @rules(apply: ["integer"])
+        type: contactType @rules(apply: ["integer"])
+        name: String @rules(apply: ["required", "max:255"])
+        lastname: String @rules(apply: ["required", "max:255"])
+        identification_type: contactIdType @rules(apply: ["integer"])
+        identification_number: Int @rules(apply: ["required"])
+        email: String @rules(apply: ["required", "max:255"])
+        phones:String @rules(apply: ["max:30"])
+        state:Int @rules(apply: ["required"])
+        address:String @rules(apply: ["max:255"])
+        web_site:String @rules(apply: ["max:255"])
+    ): Person @update(model: "App\\Contact")
 
+    createCompany(
+        type: contactType @rules(apply: ["integer"])
+        name: String @rules(apply: ["required", "max:255"])
+        identification_type: contactIdType @rules(apply: ["required"])
+        identification_number: Int @rules(apply: ["required"])
+        email: String @rules(apply: ["required", "max:255"])
+        phones:String @rules(apply: ["max:30"])
+        state:Int @rules(apply: ["required"])
+        locate:String @rules(apply: ["max:255"])
+        city:String @rules(apply: ["max:255"])
+        address:String @rules(apply: ["max:255"])
+        web_site:String @rules(apply: ["max:255"])
+    ): Company @create(model: "App\\Contact")
 
+    updateCompany(
+        id_contact: ID! @rules(apply: ["required"])
+        type: contactType @rules(apply: ["integer"])
+        name: String @rules(apply: ["required", "max:255"])
+        identification_type: contactIdType @rules(apply: ["required"])
+        identification_number: Int @rules(apply: ["required"])
+        email: String @rules(apply: ["required", "max:255"])
+        phones:String @rules(apply: ["max:30"])
+        state:Int @rules(apply: ["required"])
+        locate:String @rules(apply: ["max:255"])
+        city:String @rules(apply: ["max:255"])
+        address:String @rules(apply: ["max:255"])
+        web_site:String @rules(apply: ["max:255"])
+    ): Company @update(model: "App\\Contact")
 }
 
 
