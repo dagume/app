@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Project extends Model
 {
@@ -30,6 +30,6 @@ class Project extends Model
         return $this->hasMany(Member::class);
     }
     public function project(){
-        return $this-BelongsTo(Project::class, 'id_parent');
+        return $this-belongsTo(Project::class);
     }
 }

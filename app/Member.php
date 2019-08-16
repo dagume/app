@@ -3,15 +3,14 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Nuwave\Lighthouse\Schema\Directives\BelongsToDirective;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Permission\Models\Role;
 
 class Member extends Model
 {
 
     protected  $table= 'members';
 
-    protected $primaryKey = 'id_member';
+    protected $primaryKey = 'id_members';
 
     public $timestamps = false;
 
@@ -20,14 +19,19 @@ class Member extends Model
         'id_contact',
         'id_rol',
         'hours_week',
-        'hours_month'
+        'hours_month',
+        'state'
     ];
 
-    public function project(){
-        return $this-BelongsTo(Project::class, 'id_project');
+    public function project()
+    {
+        return $this->belongsTo('App\Project', 'id_project', 'id_project');
     }
     public function contact(){
-        return $this-BelongsTo(Contact::class,'id_contact');
+        return $this->belongsTo('App\Contact', 'id_contact', 'id_contact');
+    }
+    public function role(){
+        return $this->belongsTo('Spatie\Permission\Models\Role', 'id_role', 'id');
     }
 
 }

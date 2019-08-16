@@ -34,6 +34,6 @@ class Contact extends Model
         return $this-HasMany(Member::class);
     }
     public function contact(){
-        return $this-BelongsTo(Contact::class, 'id_parent_contact');
+        return $this-BelongsTo(Contact::class);
     }
 }

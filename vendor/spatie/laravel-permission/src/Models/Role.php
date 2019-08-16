@@ -57,6 +57,11 @@ class Role extends Model implements RoleContract
         );
     }
 
+    public function members()
+    {
+        return $this->hasMany(Member::class);
+    }
+
     /**
      * A role belongs to some users of the model associated with its guard.
      */
