@@ -25,9 +25,30 @@ type Query {
     contact(name: String! @eq): Person @find(model: "App\\Contact")
     #Members
     members: [Member] @paginate(type: "paginator" model: "App\\Member")
+    #Category
+    categories: [Category] @paginate(type: "paginator" model: "App\\Category")
+    category(name: String! @eq): Category @find(model: "App\\Category")
+     #Category
+    products: [Product] @paginate(type: "paginator" model: "App\\Product")
+    product(name: String! @eq): Product @find(model: "App\\Product")
 
 }
 
+type Product{
+    id_product:ID!
+    id_category:Int!
+    name:String!
+    description:String
+    precio:Int
+    amount:Int
+    category:Category
+}
+type Category{
+    id_category:ID!
+    name:String!
+    description:String
+    product:[Product]
+}
 type Member{
     id_members:ID!
     project:Project
@@ -234,6 +255,25 @@ type Mutation {
         hours_month:Int  @rules(apply: ["integer"])
         state:  Int = 1
         ):Member @create(model: "App\\Member")
+    #Category
+    createCategory(
+        name: String @rules(apply: ["required", "max:255"])
+        description: String @rules(apply: ["max:255"])
+    ): Category @create(model: "App\\Category")
+    updateCategory(
+        id_category: ID! @rules(apply: ["required"])
+        name: String @rules(apply: ["required", "max:255"])
+        description: String @rules(apply: ["max:255"])
+    ): Category @create(model: "App\\Category")
+    #Category
+    createProduct(
+        id_category: Int! @rules(apply: ["required","integer"])
+        name: String @rules(apply: ["required", "max:255"])
+        description: String @rules(apply: ["max:255"])
+        precio: Int @rules(apply: ["integer"])
+        amount: Int @rules(apply: ["integer"])
+    ): Product @create(model: "App\\Product")
+
 }
 
 
