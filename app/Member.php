@@ -27,11 +27,17 @@ class Member extends Model
     {
         return $this->belongsTo('App\Project', 'id_project', 'id_project');
     }
-    public function contact(){
+    public function contact()
+    {
         return $this->belongsTo('App\Contact', 'id_contact', 'id_contact');
     }
-    public function role(){
+    public function role()
+    {
         return $this->belongsTo('Spatie\Permission\Models\Role', 'id_role', 'id');
+    }
+    public function orders()
+    {
+        return $this->hasMany('App\Order', 'id_members');
     }
 
 }

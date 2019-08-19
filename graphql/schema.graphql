@@ -40,9 +40,35 @@ type Query {
     categories_paginator: [Category] @paginate(type: "paginator" model: "App\\Category")@middleware(checks:["auth:api","permission:listar categorias"])
     #Products
     product(name: String! @eq): Product @find(model: "App\\Product")@middleware(checks:["auth:api","permission:buscar producto"])
-    products: [Product!]! @all(model: "App\\Product") @middleware(checks:["auth:api","permission:listar categorias"])
+    products: [Product!]! @all(model: "App\\Product") @middleware(checks:["auth:api","permission:listar productos"])
     products_paginator: [Product] @paginate(type: "paginator" model: "App\\Product")@middleware(checks:["auth:api","permission:listar productos"])
+    #Orders
+    order(code: String! @eq): Order @find(model: "App\\Order")@middleware(checks:["auth:api","permission:buscar orden"])
+    orders: [Order!]! @all(model: "App\\Order") @middleware(checks:["auth:api","permission:listar ordenes"])
+    orders_paginator: [Order] @paginate(type: "paginator" model: "App\\Order")@middleware(checks:["auth:api","permission:listar ordenes"])
 
+}
+
+#Detales
+type Detail{
+    id_detalle: ID!
+    product:Product!
+    order:Order!
+    quantity:Int!
+    value:Int!
+    cost:Int!
+    measure:String
+}
+#Ordenes
+type Order{
+    id_order: ID!
+    member:Member!
+    name:String!
+    code:String!
+    description:String
+    date_order: Date!
+    notes:String
+    details:[Detail!]!
 }
 #Productos
 type Product{
@@ -69,6 +95,7 @@ type Member{
     hours_week:Int
     hours_month:Int
     state:Int!
+    orders:[Order]
 }
 #interface Contact{
 #    id_contact:ID!
@@ -293,6 +320,33 @@ type Mutation {
         precio: Int @rules(apply: ["integer"])
         amount: Int @rules(apply: ["integer"])
     ): Product @update(model: "App\\Product")
+    #order
+    createOrder(
+        id_members: Int! @rules(apply: ["required","integer"])
+        name: String! @rules(apply: ["required", "max:255"])
+        code: String! @rules(apply: ["required","max:255"])
+        description: String @rules(apply: ["max:255"])
+        date_order: Date! @rules(apply: ["required", "date", "before:tomorrow"])
+        notes: String @rules(apply: ["max:255"])
+    ): Order @create(model: "App\\Order")
+    updateOrder(
+        id_order:ID! @rules(apply:["required"])
+        id_members: Int! @rules(apply: ["required","integer"])
+        name: String! @rules(apply: ["required", "max:255"])
+        code: String! @rules(apply: ["required","max:255"])
+        description: String @rules(apply: ["max:255"])
+        date_order: Date! @rules(apply: ["required", "date", "before:tomorrow"])
+        notes: String @rules(apply: ["max:255"])
+    ): Order @update(model: "App\\Order")
+    #order
+    createDetail(
+        id_product: Int! @rules(apply: ["required","integer"])
+        id_order: Int! @rules(apply: ["required","integer"])
+        quantity: Int! @rules(apply: ["required", "integer"])
+        value: Int! @rules(apply: ["required", "integer"])
+        cost: Int! @rules(apply: ["required", "integer"])
+        measure: String @rules(apply: ["max:255"])
+    ): Detail @create(model: "App\\Detail")
 }
 
 
