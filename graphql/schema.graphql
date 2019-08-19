@@ -5,70 +5,65 @@ scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date
 scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 
 type Query {
-    #prjects
+    #Query proyectos
+    project(name: String! @eq): Project @find(model: "App\\Project") @middleware(checks:["auth:api","permission:buscar proyecto"])
     projects: [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api","permission:listar proyectos"])
     projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") @middleware(checks:["auth:api","permission:listar proyectos"])
-    project(name: String! @eq): Project @find(model: "App\\Project") #@middleware(checks:["auth:api","permission:buscar proyecto"])
-    #users
-    users: [User!]! @all(model: "App\\User")
-    user(name: String! @eq): User @find(model: "App\\User") @middleware(checks:["auth:api"])
-    me: User @middleware(checks:["auth:api"]) @auth
-    #roles y permissions
-    roles: [Role!]! @all(model: "Spatie\\Permission\\Models\\Role") @middleware(checks:["auth:api"])
-    permissions: [Permission!]! @all(model: "Spatie\\Permission\\Models\\Permission") @middleware(checks:["auth:api"])
-    #Contacts
+    #Query Usuarios
+    user(name: String! @eq): User @find(model: "App\\User") @middleware(checks:["auth:api","permission:buscar usuario"])
+    users: [User!]! @all(model: "App\\User") @middleware(checks:["auth:api","permission:listar usuarios"])
+    users_paginator: [User]! @paginate(type: "paginator" model: "App\\User") @middleware(checks:["auth:api","permission:listar usuarios"])
+    #Query roles
+    role(name: String! @eq): Role @find(model: "Spatie\\Permission\\Models\\Role") @middleware(checks:["auth:api","permission:buscar rol"])
+    roles: [Role!]! @all(model: "Spatie\\Permission\\Models\\Role") @middleware(checks:["auth:api","permission:listar roles"])
+    roles_paginator: [Role]! @paginate(type: "paginator" model: "Spatie\\Permission\\Models\\Role") @middleware(checks:["auth:api","permission:listar roles"])
+    #Query permissions
+    permission(name: String! @eq): Permission @find(model: "Spatie\\Permission\\Models\\Permission") @middleware(checks:["auth:api","permission:buscar permiso"])
+    permissions: [Permission!]! @all(model: "Spatie\\Permission\\Models\\Permission") @middleware(checks:["auth:api","permission:listar permisos"])
+    permissions_paginator: [Permission]! @paginate(type: "paginator" model: "Spatie\\Permission\\Models\\Permission") @middleware(checks:["auth:api","permission:listar permisos"])
+    #Contacts para hacer interface
     #contacts: [Contact!]! @all(model: "App\\Contact") #@interface(resolver: "App\\GraphQL\\Interfaces\\Contact@resolveType") @middleware(checks:["auth:api","permission:listar contactos"])
     #contacts_paginator: [Contact]! @paginate(type: "paginator" model: "App\\Contact")# @middleware(checks:["auth:api","permission:listar contactos"])
     #contact(name: String! @eq): Contact @find(model: "App\\Contact")# @middleware(checks:["auth:api","permission:buscar contacto"])
-    contacts: [Person!]! @all(model: "App\\Contact")
-    contacts_paginator: [Person]! @paginate(type: "paginator" model: "App\\Contact")
-    contact(name: String! @eq): Person @find(model: "App\\Contact")
+    contact(name: String! @eq): Person @find(model: "App\\Contact") @middleware(checks:["auth:api","permission:buscar contacto"])
+    contacts: [Person!]! @all(model: "App\\Contact") @middleware(checks:["auth:api","permission:listar contactos"])
+    contacts_paginator: [Person]! @paginate(type: "paginator" model: "App\\Contact")@middleware(checks:["auth:api","permission:listar contactos"])
     #Members
-    members: [Member] @paginate(type: "paginator" model: "App\\Member")
-    #Category
-    categories: [Category] @paginate(type: "paginator" model: "App\\Category")
-    category(name: String! @eq): Category @find(model: "App\\Category")
-     #Category
-    products: [Product] @paginate(type: "paginator" model: "App\\Product")
-    product(name: String! @eq): Product @find(model: "App\\Product")
+    members: [Member] @paginate(type: "paginator" model: "App\\Member") @middleware(checks:["auth:api","permission:listar miembros"])
+    #Categories
+    category(name: String! @eq): Category @find(model: "App\\Category")@middleware(checks:["auth:api","permission:buscar categoria"])
+    categories: [Category!]! @all(model: "App\\Category") @middleware(checks:["auth:api","permission:listar categorias"])
+    categories_paginator: [Category] @paginate(type: "paginator" model: "App\\Category")@middleware(checks:["auth:api","permission:listar categorias"])
+    #Products
+    product(name: String! @eq): Product @find(model: "App\\Product")@middleware(checks:["auth:api","permission:buscar producto"])
+    products: [Product!]! @all(model: "App\\Product") @middleware(checks:["auth:api","permission:listar categorias"])
+    products_paginator: [Product] @paginate(type: "paginator" model: "App\\Product")@middleware(checks:["auth:api","permission:listar productos"])
 
 }
-
+#Productos
 type Product{
     id_product:ID!
-    id_category:Int!
+    category:Category
     name:String!
     description:String
     precio:Int
     amount:Int
-    category:Category
 }
+#Categorias
 type Category{
     id_category:ID!
     name:String!
     description:String
-    product:[Product]
 }
+#Miembros
 type Member{
     id_members:ID!
-    project:Project
-    contact:Person
-    rol:Role
+    project:Project!
+    contact:Person!
+    rol:Role!
     hours_week:Int
     hours_month:Int
     state:Int!
-}
-
-#tipos de contacto
-enum contactType{
-    persona @enum(value: 2)
-    empresa @enum(value: 3)
-}
-enum contactIdType{
-    cedula @enum(value: 1)
-    nit @enum(value: 2)
-    pasaporte @enum(value: 3)
-    extranjera @enum(value: 4)
 }
 #interface Contact{
 #    id_contact:ID!
@@ -82,7 +77,6 @@ enum contactIdType{
 #    address:String
 #    web_site:String
 #}
-
 type Person{ #implements Contact
     id_contact:ID!
     id_parent_contact:Int
@@ -113,17 +107,19 @@ type Company{ #implements Contact
     address:String
     web_site:String
 }
-
-enum statesProject {
-    proceso
-    finalizado
-    archivado
+#tipos de contacto
+enum contactType{
+    persona @enum(value: 2)
+    empresa @enum(value: 3)
 }
-enum categoryProject {
-    estudioSuelo @enum(value: 1)
-    obraCivil @enum(value: 2)
+#Tipo de identificacion
+enum contactIdType{
+    cedula @enum(value: 1)
+    nit @enum(value: 2)
+    pasaporte @enum(value: 3)
+    extranjera @enum(value: 4)
 }
-
+#Proyecto
 type Project {
     id_project: ID!
     id_parent: categoryProject!
@@ -135,7 +131,17 @@ type Project {
     expenses: Int!
     process: Int!
     state: String
-    members:Member
+}
+#Estados proyecto
+enum statesProject {
+    proceso
+    finalizado
+    archivado
+}
+#Categorias del Proyecto
+enum categoryProject {
+    estudioSuelo @enum(value: 1)
+    obraCivil @enum(value: 2)
 }
 
 type Role {
@@ -264,16 +270,23 @@ type Mutation {
         id_category: ID! @rules(apply: ["required"])
         name: String @rules(apply: ["required", "max:255"])
         description: String @rules(apply: ["max:255"])
-    ): Category @create(model: "App\\Category")
-    #Category
+    ): Category @update(model: "App\\Category")
+    #Product
     createProduct(
         id_category: Int! @rules(apply: ["required","integer"])
-        name: String @rules(apply: ["required", "max:255"])
+        name: String! @rules(apply: ["required", "max:255"])
         description: String @rules(apply: ["max:255"])
         precio: Int @rules(apply: ["integer"])
         amount: Int @rules(apply: ["integer"])
     ): Product @create(model: "App\\Product")
-
+    updateProduct(
+        id_product: ID! @rules(apply: ["required"])
+        id_category: Int! @rules(apply: ["required"])
+        name: String! @rules(apply: ["required", "max:255"])
+        description: String @rules(apply: ["max:255"])
+        precio: Int @rules(apply: ["integer"])
+        amount: Int @rules(apply: ["integer"])
+    ): Product @update(model: "App\\Product")
 }
 
 

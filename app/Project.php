@@ -27,7 +27,7 @@ class Project extends Model
 
     public function members()
     {
-        return $this->hasMany(Member::class);
+        return $this->hasMany('App\Project', 'id_project', 'id_project');
     }
     public function project(){
         return $this-belongsTo(Project::class);
