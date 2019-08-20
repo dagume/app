@@ -10,7 +10,7 @@ type Query {
     #Query proyectos
     project(name: String! @eq): Project @find(model: "App\\Project") @middleware(checks:["auth:api","permission:buscar proyecto"])
     projects: [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api","permission:listar proyectos"])
-    projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") @middleware(checks:["auth:api","permission:listar proyectos"])
+    projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") @middleware(checks:["auth:api","permission:Listar proyectos"])
     #projectsSearchName(order: String! ): [Project!]! @paginate(scopes: ["filterByName"])
     #projectsSearchName(name: String @whereLike(filter: "wildcard")): [Project!]!
     #Query Usuarios
@@ -141,12 +141,12 @@ type Company{ #implements Contact
 }
 #tipos de contacto
 enum contactType{
-    persona @enum(value: 2)
-    empresa @enum(value: 3)
+    persona @enum(value: 1)
+    empresa @enum(value: 2)
 }
 #Tipo de identificacion
 enum contactIdType{
-    cedula @enum(value: 1)
+    CC @enum(value: 1)
     nit @enum(value: 2)
     pasaporte @enum(value: 3)
     extranjera @enum(value: 4)
@@ -271,8 +271,8 @@ type Mutation {
     forgotPassword(data: ForgotPasswordInput!): ForgotPasswordResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\ForgotPassword@resolve")
     updateForgottenPassword(data: NewPasswordWithCodeInput): ForgotPasswordResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\ResetPassword@resolve")
     #projects
-    createProject(id_parent: categoryProject @rules(apply: ["integer"]) name: String @rules(apply: ["required", "alpha", "max:255"]) start_date: Date @rules(apply: ["required", "date", "before:tomorrow"]) end_date: Date @rules(apply: ["required", "date", "after:tomorrow"]) description: String @rules(apply: ["nullable", "string"]) contract_value: Int @rules(apply: ["required"]) expenses: Int @rules(apply: ["required", "integer"]) process: Int @rules(apply: ["required", "integer"]) state: String @rules(apply: ["required", "in:proceso,finalizado,archivado"])): Project @create(model: "App\\Project") @middleware(checks:["auth:api","permission:agregar proyecto"])
-    updateProject(id_project: ID! @rules(apply: ["required"])id_parent: categoryProject @rules(apply: ["integer"])name: String @rules(apply: ["required", "alpha", "max:255"])start_date: Date @rules(apply: ["required", "date", "before:tomorrow"])end_date: Date @rules(apply: ["required", "date", "after:tomorrow"])description: String @rules(apply: ["nullable", "string"])contract_value: Int @rules(apply: ["required"])expenses: Int @rules(apply: ["required", "integer"])process: Int @rules(apply: ["required", "integer"])state: String @rules(apply: ["required", "in:proceso,finalizado,archivado"])): Project @update(model: "App\\Project") @middleware(checks:["auth:api","permission:editar proyecto"])
+    createProject(id_parent: categoryProject @rules(apply: ["integer"]) name: String @rules(apply: ["required", "alpha", "max:255"]) start_date: Date @rules(apply: ["required", "date"]) end_date: Date @rules(apply: ["required", "date"]) description: String @rules(apply: ["nullable"]) contract_value: Int @rules(apply: ["required"]) expenses: Int @rules(apply: ["required", "integer"]) process: Int @rules(apply: ["required", "integer"]) state: String @rules(apply: ["required", "in:proceso,finalizado,archivado"])): Project @create(model: "App\\Project") @middleware(checks:["auth:api","permission:agregar proyecto"])
+    updateProject(id_project: ID! @rules(apply: ["required"])id_parent: categoryProject @rules(apply: ["integer"])name: String @rules(apply: ["required", "alpha", "max:255"])start_date: Date @rules(apply: ["required", "date"])end_date: Date @rules(apply: ["required", "date"])description: String @rules(apply: ["nullable", "string"])contract_value: Int @rules(apply: ["required"])expenses: Int @rules(apply: ["required", "integer"])process: Int @rules(apply: ["required", "integer"])state: String @rules(apply: ["required", "in:proceso,finalizado,archivado"])): Project @update(model: "App\\Project") @middleware(checks:["auth:api","permission:editar proyecto"])
     updateStateProject(id_project: ID! @rules(apply: ["required"]) state: String @rules(apply: ["required", "in:proceso,finalizado,archivado"])): Project @update(model: "App\\Project") @middleware(checks:["auth:api","permission:cambiar estado proyecto"])
     #deleteProject(id_project: ID! @rules(apply: ["required"])): Project @delete(model: "App\\Project") @middleware(checks:["auth:api"])
     #Contacts
