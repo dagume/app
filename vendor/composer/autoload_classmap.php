@@ -6,9 +6,12 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Category' => $baseDir . '/app/Category.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Contact' => $baseDir . '/app/Contact.php',
+    'App\\Detail' => $baseDir . '/app/Detail.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
+    'App\\GraphQL\\Interfaces\\Contact' => $baseDir . '/app/GraphQL/Interfaces/Contact.php',
     'App\\GraphQL\\Mutations\\CreateProject' => $baseDir . '/app/GraphQL/Mutations/CreateProject.php',
     'App\\Http\\Controllers\\Auth\\ForgotPasswordController' => $baseDir . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
     'App\\Http\\Controllers\\Auth\\LoginController' => $baseDir . '/app/Http/Controllers/Auth/LoginController.php',
@@ -16,6 +19,7 @@ return array(
     'App\\Http\\Controllers\\Auth\\ResetPasswordController' => $baseDir . '/app/Http/Controllers/Auth/ResetPasswordController.php',
     'App\\Http\\Controllers\\Auth\\VerificationController' => $baseDir . '/app/Http/Controllers/Auth/VerificationController.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
+    'App\\Http\\Controllers\\RolesController' => $baseDir . '/app/Http/Controllers/RolesController.php',
     'App\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',
     'App\\Http\\Middleware\\Authenticate' => $baseDir . '/app/Http/Middleware/Authenticate.php',
     'App\\Http\\Middleware\\CheckForMaintenanceMode' => $baseDir . '/app/Http/Middleware/CheckForMaintenanceMode.php',
@@ -25,6 +29,8 @@ return array(
     'App\\Http\\Middleware\\TrustProxies' => $baseDir . '/app/Http/Middleware/TrustProxies.php',
     'App\\Http\\Middleware\\VerifyCsrfToken' => $baseDir . '/app/Http/Middleware/VerifyCsrfToken.php',
     'App\\Member' => $baseDir . '/app/Member.php',
+    'App\\Order' => $baseDir . '/app/Order.php',
+    'App\\Product' => $baseDir . '/app/Product.php',
     'App\\Project' => $baseDir . '/app/Project.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',
     'App\\Providers\\AuthServiceProvider' => $baseDir . '/app/Providers/AuthServiceProvider.php',
@@ -1881,6 +1887,8 @@ return array(
     'Laravel\\Tinker\\Console\\TinkerCommand' => $vendorDir . '/laravel/tinker/src/Console/TinkerCommand.php',
     'Laravel\\Tinker\\TinkerCaster' => $vendorDir . '/laravel/tinker/src/TinkerCaster.php',
     'Laravel\\Tinker\\TinkerServiceProvider' => $vendorDir . '/laravel/tinker/src/TinkerServiceProvider.php',
+    'Laraveles\\Spanish\\Commands\\InstallLang' => $vendorDir . '/laraveles/spanish/src/Commands/InstallLang.php',
+    'Laraveles\\Spanish\\SpanishServiceProvider' => $vendorDir . '/laraveles/spanish/src/SpanishServiceProvider.php',
     'Lcobucci\\JWT\\Builder' => $vendorDir . '/lcobucci/jwt/src/Builder.php',
     'Lcobucci\\JWT\\Claim' => $vendorDir . '/lcobucci/jwt/src/Claim.php',
     'Lcobucci\\JWT\\Claim\\Basic' => $vendorDir . '/lcobucci/jwt/src/Claim/Basic.php',

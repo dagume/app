@@ -15,6 +15,7 @@
         "laravel/framework": "5.8.*",
         "laravel/passport": "^7.3",
         "laravel/tinker": "^1.0",
+        "laraveles/spanish": "^1.2",
         "mll-lab/laravel-graphql-playground": "^1.1",
         "nuwave/lighthouse": "^3.7",
         "spatie/laravel-permission": "^2.37"
