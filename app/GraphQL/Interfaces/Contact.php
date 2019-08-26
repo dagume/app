@@ -38,6 +38,7 @@ class Contact
     {
 
         
+
         // Default to getting a type with the same name as the passed in root value
         // TODO implement your own resolver logic - if the default is fine, just delete this class
         return $this->typeRegistry->get(class_basename($rootValue));

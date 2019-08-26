@@ -22,6 +22,7 @@ class Member extends Model
         'hours_month',
         'state'
     ];
+    
 
     public function project()
     {
