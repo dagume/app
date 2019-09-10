@@ -13,6 +13,7 @@ class Project extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'id_proyect_type',
         'id_parent',
         'name',
         'start_date',
@@ -21,9 +22,17 @@ class Project extends Model
         'contract_value',
         'expenses',
         'process',
-        'state'
+        'state',
+        'place',
+        'address',
+        'type',
+        'association',
+        'consortium_name',
     ];
-
+    public function Project_type()
+    {
+        return $this->belongsTo('App\Project_type', 'id_proyect_type', 'id_proyect_type');
+    }
     public function members()
     {
         return $this->hasMany('App\Member', 'id_project');

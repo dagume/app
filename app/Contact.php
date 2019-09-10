@@ -15,7 +15,6 @@ class Contact extends Model
 
     protected $fillable = [
         'id_parent_contact',
-        'id_job',
         'type',
         'name',
         'lastname',
@@ -27,9 +26,13 @@ class Contact extends Model
         'locate',
         'city',
         'address',
-        'web_site'
+        'web_site',
+        'password'
     ];
-
+    //Relacion con ordenes
+    //Relacion con cotizacion
+    //Relacion con cuentas
+    //Relacion con Roles
     public function members(){
         return $this-HasMany(Member::class);
     }

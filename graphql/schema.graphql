@@ -8,12 +8,17 @@ type Query {
     #me
     me: User @auth(guard: "api")
     #Query proyectos
-    filterProject(name: String! @where(operator: "like")): [Project] @all(model: "App\\Project") @middleware(checks:["auth:api","permission:buscar proyecto"])
+    filterName_Project(name: String! @where(operator: "like")): [Project] @all(model: "App\\Project") @middleware(checks:["auth:api","permission:buscar proyecto"])
     project(name: String!): Project @find(model: "App\\Project") @middleware(checks:["auth:api","permission:buscar proyecto"])
+    proyect_type(id_proyect_type: Int!): [Project] @find(model: "App\\Project") @middleware(checks:["auth:api","permission:buscar proyecto"])
+    parent(id_parent: Int!): [Project] @find(model: "App\\Project") @middleware(checks:["auth:api","permission:buscar proyecto"])
     projects: [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api","permission:listar proyectos"])
     projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") @middleware(checks:["auth:api","permission:Listar proyectos"])
-    #projectsSearchName(order: String! ): [Project!]! @paginate(scopes: ["filterByName"])
-    #projectsSearchName(name: String @whereLike(filter: "wildcard")): [Project!]!
+    #Query Contacts
+    filterName_Contact(name: String! @where(operator: "like")): Contact @find(model: "App\\Contact") @middleware(checks:["auth:api","permission:buscar contacto"])
+    contact(name: String! @eq): Contact @find(model: "App\\Contact") @middleware(checks:["auth:api","permission:buscar contacto"])
+    contacts: [Contact!]! @all(model: "App\\Contact")  @middleware(checks:["auth:api","permission:listar contactos"])
+    contacts_paginator: [Contact]! @paginate(type: "paginator" model: "App\\Contact") @middleware(checks:["auth:api","permission:listar contactos"])
     #Query Usuarios
     user(name: String! @eq): User @find(model: "App\\User") @middleware(checks:["auth:api","permission:buscar usuario"])
     users: [User!]! @all(model: "App\\User") @middleware(checks:["auth:api","permission:listar usuarios"])
@@ -26,13 +31,6 @@ type Query {
     permission(name: String! @eq): Permission @find(model: "Spatie\\Permission\\Models\\Permission") @middleware(checks:["auth:api","permission:buscar permiso"])
     permissions: [Permission!]! @all(model: "Spatie\\Permission\\Models\\Permission") @middleware(checks:["auth:api","permission:listar permisos"])
     permissions_paginator: [Permission]! @paginate(type: "paginator" model: "Spatie\\Permission\\Models\\Permission") @middleware(checks:["auth:api","permission:listar permisos"])
-    #Contacts para hacer interface
-    contacts: [Contact!]! @all(model: "App\\Contact")  #@interface(resolver: "App\\GraphQL\\Interfaces\\Contact@resolveType") @middleware(checks:["auth:api","permission:listar contactos"])
-    contacts_paginator: [Contact]! @paginate(type: "paginator" model: "App\\Contact")# @middleware(checks:["auth:api","permission:listar contactos"])
-    contact(name: String! @eq): Contact @find(model: "App\\Contact")# @middleware(checks:["auth:api","permission:buscar contacto"])
-    #contact(name: String! @eq): Person @find(model: "App\\Contact") @middleware(checks:["auth:api","permission:buscar contacto"])
-    #contacts: [Person!]! @all(model: "App\\Contact") @middleware(checks:["auth:api","permission:listar contactos"])
-    #contacts_paginator: [Person]! @paginate(type: "paginator" model: "App\\Contact")@middleware(checks:["auth:api","permission:listar contactos"])
     #Members
     members: [Member] @paginate(type: "paginator" model: "App\\Member") @middleware(checks:["auth:api","permission:listar miembros"])
     #Categories
@@ -62,13 +60,25 @@ type Detail{
 }
 #Ordenes
 type Order{
-    id_order: ID!
+    id_order:ID!
     member:Member!
+    secuence:Int!
     name:String!
     code:String!
+    application_date: Date!
+    state: String!
     description:String
-    date_order: Date!
-    notes:String
+    quotation_date:Date
+    authorization:String!
+    authorization_date:Date
+    delivery_term:String
+    payment_method:String
+    delivery_site:String
+    offer_validity:Int
+    observations:String
+    advisor_id:Int
+    sender_id:Int!
+    transport:Int
     details:[Detail!]!
 }
 #Productos
@@ -77,8 +87,6 @@ type Product{
     category:Category!
     name:String!
     description:String
-    precio:Int
-    amount:Int
 }
 #Categorias
 type Category{
@@ -102,7 +110,6 @@ type Member{
 type Contact {
     id_contact:ID!
     id_parent_contact:Int
-    id_job:Int
     type:contactType!
     name:String!
     lastname:String
@@ -115,22 +122,33 @@ type Contact {
     city:String
     address:String
     web_site:String
+    password: String
+    contacts:[Contact]
+    members:[Member]
 }
 #tipos de contacto
 enum contactType{
     persona @enum(value: 1)
     empresa @enum(value: 2)
 }
-#Tipo de identificacion
+#Tipo de identificacion Contacto
 enum contactIdType{
     CC @enum(value: 1)
     nit @enum(value: 2)
     pasaporte @enum(value: 3)
     extranjera @enum(value: 4)
 }
+
+#tipos de proyecto
+type Project_type {
+    id_proyect_type:ID!
+    name_project_type:String!
+    description_project_type:String
+}
 #Proyecto
 type Project {
     id_project: ID!
+    id_proyect_type:Project_type!
     parent_project:Project
     name: String!
     start_date: Date!
@@ -140,7 +158,22 @@ type Project {
     expenses: Int!
     process: Int!
     state: String
+    place:String
+    address:String
+    type:typeProject!
+    association:associationProject!
+    consortium_name:String
     members: [Member]
+}
+#Tipos proyecto
+enum typeProject {
+    publico
+    privado
+}
+#association proyecto
+enum associationProject {
+    consosrcio
+    APP
 }
 #Estados proyecto
 enum statesProject {
@@ -149,9 +182,12 @@ enum statesProject {
     archivado
 }
 #Categorias del Proyecto
-enum categoryProject {
-    estudioSuelo @enum(value: 1)
-    obraCivil @enum(value: 2)
+enum parentProject {
+    remodelacion @enum(value: 1)
+    mantenimiento @enum(value: 2)
+    construccion @enum(value: 3)
+    estudio_suelos @enum(value: 4)
+    diseno @enum(value: 5)
 }
 
 type Role {
@@ -224,22 +260,6 @@ input NewPasswordWithCodeInput {
     password_confirmation: String!
 }
 
-#input ContactInput{
-#    id_parent_contact: Int @rules(apply: ["integer"])
-#    id_job: Int @rules(apply: ["integer"])
-#    type: contactType @rules(apply: ["integer"])
-#    name: String @rules(apply: ["required", "max:255"])
-#    lastname: String @rules(apply: ["required", "max:255"])
-#    identification_type: contactIdType @rules(apply: ["required"])
-#    identification_number: Int @rules(apply: ["required"])
-#    email: String @rules(apply: ["required", "max:255"])
-#    phones:String @rules(apply: ["max:30"])
-#    state:Int @rules(apply: ["required"])
-#    locate:String @rules(apply: ["max:255"])
-#    city:String @rules(apply: ["max:255"])
-#    address:String @rules(apply: ["max:255"])
-#    web_site:String @rules(apply: ["max:255"])
-#}
 type Mutation {
     #Auth
     login(data: LoginInput): AuthPayload! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\Login@resolve")
@@ -247,19 +267,59 @@ type Mutation {
     logout: LogoutResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\Logout@resolve")
     forgotPassword(data: ForgotPasswordInput!): ForgotPasswordResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\ForgotPassword@resolve")
     updateForgottenPassword(data: NewPasswordWithCodeInput): ForgotPasswordResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\ResetPassword@resolve")
-    #projects
-    createProject(id_parent: categoryProject @rules(apply: ["integer"]) name: String @rules(apply: ["required", "max:255","unique:projects,name"]) start_date: Date @rules(apply: ["required", "date"]) end_date: Date @rules(apply: ["required", "date"]) description: String @rules(apply: ["nullable"]) contract_value: Int @rules(apply: ["required"]) expenses: Int @rules(apply: ["required", "integer"]) process: Int @rules(apply: ["required", "integer"]) state: String @rules(apply: ["required", "in:proceso,finalizado,archivado"])): Project @create(model: "App\\Project") @middleware(checks:["auth:api","permission:Crear proyectos"])
-    updateProject(id_project: ID! @rules(apply: ["required"])id_parent: categoryProject @rules(apply: ["integer"])name: String @rules(apply: ["required", "max:255","unique:projects,name"])start_date: Date @rules(apply: ["required", "date"])end_date: Date @rules(apply: ["required", "date"])description: String @rules(apply: ["nullable"])contract_value: Int @rules(apply: ["required"])expenses: Int @rules(apply: ["required", "integer"])process: Int @rules(apply: ["required", "integer"])state: String @rules(apply: ["required", "in:proceso,finalizado,archivado"])): Project @update(model: "App\\Project") @middleware(checks:["auth:api","permission:Editar proyectos"])
-    updateStateProject(id_project: ID! @rules(apply: ["required"]) state: String @rules(apply: ["required", "in:proceso,finalizado,archivado"])): Project @update(model: "App\\Project") @middleware(checks:["auth:api","permission:cambiar estado proyecto"])
-    #deleteProject(id_project: ID! @rules(apply: ["required"])): Project @delete(model: "App\\Project") @middleware(checks:["auth:api"])
-    #Contacts
+    ########################projects
+    #Crear Proyecto
+    createProject(
+        id_proyect_type: Int @rules(apply: ["integer","required"])
+        id_parent: parentProject @rules(apply: ["integer"])
+        name: String @rules(apply: ["required", "max:255","unique:projects,name"])
+        start_date: Date @rules(apply: ["required", "date"])
+        end_date: Date @rules(apply: ["required", "date"])
+        description: String @rules(apply: ["nullable"])
+        contract_value: Int @rules(apply: ["required"])
+        state: String = "seleccion"
+        place: String
+        address: String
+        type: typeProject @rules(apply: ["required"])
+        association: associationProject @rules(apply: ["required"])
+        consortium_name:String
+    ): Project @create(model: "App\\Project") @middleware(checks:["auth:api","permission:Crear proyectos"])
+    #Editar Proyecto
+    updateProject(
+        id_project: ID! @rules(apply: ["required"])
+        name: String @rules(apply: ["required", "max:255","unique:projects,name"])
+        description: String @rules(apply: ["nullable"])
+        place: String
+        address: String
+        consortium_name: String
+    ): Project @update(model: "App\\Project") @middleware(checks:["auth:api","permission:Editar proyectos"])
+    #Editar estado Proyecto
+    updateStateProject(
+        id_project: ID! @rules(apply: ["required"])
+        state: String @rules(apply: ["required", "in:ejecucion, suspendido"])
+    ): Project @update(model: "App\\Project") @middleware(checks:["auth:api","permission:cambiar estado proyecto"])
+    ######################Contacts
     createContact(
         id_parent_contact: Int @rules(apply: ["integer"])
-        id_job: Int @rules(apply: ["integer"])
-        type: contactType @rules(apply: ["integer"])
+        type: contactType @rules(apply: ["required", "integer"])
         name: String @rules(apply: ["required", "max:255"])
-        lastname: String @rules(apply: ["required", "max:255"])
+        lastname: String @rules(apply: ["max:255"])
         identification_type: contactIdType @rules(apply: ["required"])
+        identification_number: Int @rules(apply: ["required"])
+        email: String @rules(apply: ["required", "max:255"])
+        phones:String @rules(apply: ["max:30"])
+        state:Int = 1
+        locate:String @rules(apply: ["max:255"])
+        city:String @rules(apply: ["max:255"])
+        address:String @rules(apply: ["max:255"])
+        web_site:String @rules(apply: ["max:255"])
+    ): Contact @create(model: "App\\Contact") @middleware(checks:["auth:api","permission:agregar contacto"])
+
+    updatePerson(
+        id_contact: ID! @rules(apply: ["required"])
+        name: String @rules(apply: ["required", "max:255"])
+        lastname: String @rules(apply: ["max:255"])
+        identification_type: contactIdType @rules(apply: ["integer"])
         identification_number: Int @rules(apply: ["required"])
         email: String @rules(apply: ["required", "max:255"])
         phones:String @rules(apply: ["max:30"])
@@ -268,15 +328,7 @@ type Mutation {
         city:String @rules(apply: ["max:255"])
         address:String @rules(apply: ["max:255"])
         web_site:String @rules(apply: ["max:255"])
-    ): Contact @create(model: "App\\Contact") #@middleware(checks:["auth:api","permission:agregar contacto"])
-
-    updateProject(id_project: ID! @rules(apply: ["required"])id_parent: Int @rules(apply: ["integer"])name: String @rules(apply: ["required", "alpha", "max:255"])start_date: Date @rules(apply: ["required", "date", "before:tomorrow"])end_date: Date @rules(apply: ["required", "date", "after:tomorrow"])description: String @rules(apply: ["nullable", "string"])contract_value: Int @rules(apply: ["required"])expenses: Int @rules(apply: ["required", "integer"])process: Int @rules(apply: ["required", "integer"])state: String @rules(apply: ["required", "in:proceso,finalizado,archivado"])): Project @update(model: "App\\Project") @middleware(checks:["auth:api","permission:editar proyecto"])
-    updateStateProject(id_project: ID! @rules(apply: ["required"]) state: String @rules(apply: ["required", "in:proceso,finalizado,archivado"])): Project @update(model: "App\\Project") @middleware(checks:["auth:api","permission:cambiar estado proyecto"])
-    #Person
-    #createPerson(id_parent_contact: Int @rules(apply: ["integer"])id_job: Int @rules(apply: ["integer"])type: contactType @rules(apply: ["integer"])name: String @rules(apply: ["required", "max:255"])lastname: String @rules(apply: ["required", "max:255"])identification_type: contactIdType @rules(apply: ["integer"])identification_number: Int @rules(apply: ["required","unique:contacts,identification_number"])email: String @rules(apply: ["required", "max:255"])phones:String @rules(apply: ["max:30"])state:Int @rules(apply: ["required"])address:String @rules(apply: ["max:255"])web_site:String @rules(apply: ["max:255"])): Person @create(model: "App\\Contact")
-    #updatePerson(id_contact: ID! @rules(apply: ["required"])id_parent_contact: Int @rules(apply: ["integer"])id_job: Int @rules(apply: ["integer"])type: contactType @rules(apply: ["integer"])name: String @rules(apply: ["required", "max:255"])lastname: String @rules(apply: ["required", "max:255"])identification_type: contactIdType @rules(apply: ["integer"])identification_number: Int @rules(apply: ["required"])email: String @rules(apply: ["required", "max:255"])phones:String @rules(apply: ["max:30"])state:Int @rules(apply: ["required"])address:String @rules(apply: ["max:255"])web_site:String @rules(apply: ["max:255"])): Person @update(model: "App\\Contact")
-    #createCompany(type: contactType @rules(apply: ["integer"])name: String @rules(apply: ["required", "max:255"])identification_type: contactIdType @rules(apply: ["required"])identification_number: Int @rules(apply: ["required"])email: String @rules(apply: ["required", "max:255"])phones:String @rules(apply: ["max:30"])state:Int @rules(apply: ["required"])locate:String @rules(apply: ["max:255"])city:String @rules(apply: ["max:255"])address:String @rules(apply: ["max:255"])web_site:String @rules(apply: ["max:255"])): Company @create(model: "App\\Contact")
-    #updateCompany(id_contact: ID! @rules(apply: ["required"])type: contactType @rules(apply: ["integer"])name: String @rules(apply: ["required", "max:255"])identification_type: contactIdType @rules(apply: ["required"])identification_number: Int @rules(apply: ["required"])email: String @rules(apply: ["required", "max:255"])phones:String @rules(apply: ["max:30"])state:Int @rules(apply: ["required"])locate:String @rules(apply: ["max:255"])city:String @rules(apply: ["max:255"])address:String @rules(apply: ["max:255"])web_site:String @rules(apply: ["max:255"])): Company @update(model: "App\\Contact")
+    ): Person @update(model: "App\\Contact") @middleware(checks:["auth:api","permission:editart contacto"])
     #member
     member_has_project(
         id_project: Int! @rules(apply: ["integer"])
@@ -301,16 +353,12 @@ type Mutation {
         id_category: Int! @rules(apply: ["required","integer"])
         name: String! @rules(apply: ["required", "max:255"])
         description: String @rules(apply: ["max:255"])
-        precio: Int @rules(apply: ["integer"])
-        amount: Int @rules(apply: ["integer"])
     ): Product @create(model: "App\\Product")
     updateProduct(
         id_product: ID! @rules(apply: ["required"])
         id_category: Int! @rules(apply: ["required"])
         name: String! @rules(apply: ["required", "max:255"])
         description: String @rules(apply: ["max:255"])
-        precio: Int @rules(apply: ["integer"])
-        amount: Int @rules(apply: ["integer"])
     ): Product @update(model: "App\\Product")
     #order
     createOrder(
@@ -342,5 +390,21 @@ type Mutation {
 }
 
 
+#input ContactInput{
+#    id_parent_contact: Int @rules(apply: ["integer"])
+#    id_job: Int @rules(apply: ["integer"])
+#    type: contactType @rules(apply: ["integer"])
+#    name: String @rules(apply: ["required", "max:255"])
+#    lastname: String @rules(apply: ["required", "max:255"])
+#    identification_type: contactIdType @rules(apply: ["required"])
+#    identification_number: Int @rules(apply: ["required"])
+#    email: String @rules(apply: ["required", "max:255"])
+#    phones:String @rules(apply: ["max:30"])
+#    state:Int @rules(apply: ["required"])
+#    locate:String @rules(apply: ["max:255"])
+#    city:String @rules(apply: ["max:255"])
+#    address:String @rules(apply: ["max:255"])
+#    web_site:String @rules(apply: ["max:255"])
+#}
 
 
