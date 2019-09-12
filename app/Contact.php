@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Contact extends Model
 {
@@ -11,10 +10,11 @@ class Contact extends Model
 
     protected $primaryKey = 'id_contact';
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'id_parent_contact',
+        'id_role',
         'type',
         'name',
         'lastname',
@@ -23,11 +23,14 @@ class Contact extends Model
         'email',
         'phones',
         'state',
-        'locate',
         'city',
+        'locate',
         'address',
         'web_site',
-        'password'
+        'password',
+    ];
+    protected $hidden = [
+        'password', 'remember_token',
     ];
     //Relacion con ordenes
     //Relacion con cotizacion

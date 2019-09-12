@@ -165,6 +165,7 @@ class ComposerStaticInit97dd7e94a04e4d4346b7962fbe749211
         array (
             'Cron\\' => 5,
             'Carbon\\' => 7,
+            'Caffeinated\\Shinobi\\' => 20,
         ),
         'B' => 
         array (
@@ -466,6 +467,10 @@ class ComposerStaticInit97dd7e94a04e4d4346b7962fbe749211
         array (
             0 => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon',
         ),
+        'Caffeinated\\Shinobi\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/caffeinated/shinobi/src',
+        ),
         'BeyondCode\\DumpServer\\' => 
         array (
             0 => __DIR__ . '/..' . '/beyondcode/laravel-dump-server/src',
@@ -511,7 +516,6 @@ class ComposerStaticInit97dd7e94a04e4d4346b7962fbe749211
         'App\\Contact' => __DIR__ . '/../..' . '/app/Contact.php',
         'App\\Detail' => __DIR__ . '/../..' . '/app/Detail.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
-        'App\\GraphQL\\Interfaces\\Contact' => __DIR__ . '/../..' . '/app/GraphQL/Interfaces/Contact.php',
         'App\\GraphQL\\Mutations\\CreateProject' => __DIR__ . '/../..' . '/app/GraphQL/Mutations/CreateProject.php',
         'App\\Http\\Controllers\\Auth\\ForgotPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
         'App\\Http\\Controllers\\Auth\\LoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/LoginController.php',
@@ -532,6 +536,7 @@ class ComposerStaticInit97dd7e94a04e4d4346b7962fbe749211
         'App\\Order' => __DIR__ . '/../..' . '/app/Order.php',
         'App\\Product' => __DIR__ . '/../..' . '/app/Product.php',
         'App\\Project' => __DIR__ . '/../..' . '/app/Project.php',
+        'App\\Project_type' => __DIR__ . '/../..' . '/app/Project_type.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'App\\Providers\\AuthServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AuthServiceProvider.php',
         'App\\Providers\\BroadcastServiceProvider' => __DIR__ . '/../..' . '/app/Providers/BroadcastServiceProvider.php',
@@ -548,6 +553,24 @@ class ComposerStaticInit97dd7e94a04e4d4346b7962fbe749211
         'BeyondCode\\DumpServer\\DumpServerServiceProvider' => __DIR__ . '/..' . '/beyondcode/laravel-dump-server/src/DumpServerServiceProvider.php',
         'BeyondCode\\DumpServer\\Dumper' => __DIR__ . '/..' . '/beyondcode/laravel-dump-server/src/Dumper.php',
         'BeyondCode\\DumpServer\\RequestContextProvider' => __DIR__ . '/..' . '/beyondcode/laravel-dump-server/src/RequestContextProvider.php',
+        'Caffeinated\\Shinobi\\Concerns\\HasPermissions' => __DIR__ . '/..' . '/caffeinated/shinobi/src/Concerns/HasPermissions.php',
+        'Caffeinated\\Shinobi\\Concerns\\HasRoles' => __DIR__ . '/..' . '/caffeinated/shinobi/src/Concerns/HasRoles.php',
+        'Caffeinated\\Shinobi\\Concerns\\HasRolesAndPermissions' => __DIR__ . '/..' . '/caffeinated/shinobi/src/Concerns/HasRolesAndPermissions.php',
+        'Caffeinated\\Shinobi\\Concerns\\RefreshesPermissionCache' => __DIR__ . '/..' . '/caffeinated/shinobi/src/Concerns/RefreshesPermissionCache.php',
+        'Caffeinated\\Shinobi\\Contracts\\Permission' => __DIR__ . '/..' . '/caffeinated/shinobi/src/Contracts/Permission.php',
+        'Caffeinated\\Shinobi\\Contracts\\Role' => __DIR__ . '/..' . '/caffeinated/shinobi/src/Contracts/Role.php',
+        'Caffeinated\\Shinobi\\Exceptions\\PermissionNotFoundException' => __DIR__ . '/..' . '/caffeinated/shinobi/src/Exceptions/PermissionNotFoundException.php',
+        'Caffeinated\\Shinobi\\Facades\\Shinobi' => __DIR__ . '/..' . '/caffeinated/shinobi/src/Facades/Shinobi.php',
+        'Caffeinated\\Shinobi\\Middleware\\UserHasAllRoles' => __DIR__ . '/..' . '/caffeinated/shinobi/src/Middleware/UserHasAllRoles.php',
+        'Caffeinated\\Shinobi\\Middleware\\UserHasAnyRole' => __DIR__ . '/..' . '/caffeinated/shinobi/src/Middleware/UserHasAnyRole.php',
+        'Caffeinated\\Shinobi\\Middleware\\UserHasRole' => __DIR__ . '/..' . '/caffeinated/shinobi/src/Middleware/UserHasRole.php',
+        'Caffeinated\\Shinobi\\Models\\Permission' => __DIR__ . '/..' . '/caffeinated/shinobi/src/Models/Permission.php',
+        'Caffeinated\\Shinobi\\Models\\Role' => __DIR__ . '/..' . '/caffeinated/shinobi/src/Models/Role.php',
+        'Caffeinated\\Shinobi\\Shinobi' => __DIR__ . '/..' . '/caffeinated/shinobi/src/Shinobi.php',
+        'Caffeinated\\Shinobi\\ShinobiServiceProvider' => __DIR__ . '/..' . '/caffeinated/shinobi/src/ShinobiServiceProvider.php',
+        'Caffeinated\\Shinobi\\Tactics\\AssignRoleTo' => __DIR__ . '/..' . '/caffeinated/shinobi/src/Tactics/AssignRoleTo.php',
+        'Caffeinated\\Shinobi\\Tactics\\GivePermissionTo' => __DIR__ . '/..' . '/caffeinated/shinobi/src/Tactics/GivePermissionTo.php',
+        'Caffeinated\\Shinobi\\Tactics\\RevokePermissionsFrom' => __DIR__ . '/..' . '/caffeinated/shinobi/src/Tactics/RevokePermissionFrom.php',
         'Carbon\\Carbon' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Carbon.php',
         'Carbon\\CarbonImmutable' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/CarbonImmutable.php',
         'Carbon\\CarbonInterface' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/CarbonInterface.php',

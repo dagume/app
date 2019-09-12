@@ -4,37 +4,47 @@ namespace App;
 
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     use HasApiTokens, Notifiable, HasRoles;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name', 'email', 'password',
-    ];
+    protected  $table= 'contacts';
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
+    protected $primaryKey = 'id_contact';
+
+    public $timestamps = true;
+
+    protected $fillable = [
+        'id_parent_contact',
+        'id_role',
+        'type',
+        'name',
+        'lastname',
+        'identification_type',
+        'identification_number',
+        'email',
+        'phones',
+        'state',
+        'city',
+        'locate',
+        'address',
+        'web_site',
+        'password',
+    ];
     protected $hidden = [
         'password', 'remember_token',
     ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    //Relacion con ordenes
+    //Relacion con cotizacion
+    //Relacion con cuentas
+    //Relacion con Roles
+    public function members(){
+        return $this-HasMany(Member::class);
+    }
+    public function contact(){
+        return $this-BelongsTo(Contact::class);
+    }
 }
