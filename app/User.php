@@ -4,7 +4,6 @@ namespace App;
 
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
-
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
@@ -45,6 +44,6 @@ class User extends Authenticatable
         return $this-HasMany(Member::class);
     }
     public function contact(){
-        return $this-BelongsTo(Contact::class);
+        return $this-BelongsTo(User::class);
     }
 }
