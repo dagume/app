@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Role extends Model implements RoleContract
 {
     use HasPermissions;
-    
+
     /**
      * The attributes that are fillable via mass assignment.
      *
@@ -20,7 +20,7 @@ class Role extends Model implements RoleContract
 
     /**
      * Create a new Role instance.
-     * 
+     *
      * @param  array  $attributes
      * @return void
      */
@@ -43,7 +43,7 @@ class Role extends Model implements RoleContract
 
     /**
      * Determine if role has permission flags.
-     * 
+     *
      * @return bool
      */
     public function hasPermissionFlags(): bool
@@ -54,7 +54,7 @@ class Role extends Model implements RoleContract
     /**
      * Determine if the requested permission is permitted or denied
      * through a special role flag.
-     * 
+     *
      * @return bool
      */
     public function hasPermissionThroughFlag(): bool

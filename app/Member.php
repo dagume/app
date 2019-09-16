@@ -17,12 +17,11 @@ class Member extends Model
     protected $fillable = [
         'id_project',
         'id_contact',
-        'id_rol',
         'hours_week',
         'hours_month',
         'state'
     ];
-    
+
 
     public function project()
     {
@@ -32,9 +31,9 @@ class Member extends Model
     {
         return $this->belongsTo('App\Contact', 'id_contact', 'id_contact');
     }
-    public function role()
+    public function roles()
     {
-        return $this->belongsTo('Spatie\Permission\Models\Role', 'id_role', 'id');
+        return $this->belongsToMany('Caffeinated\Shinobi\Models\Role', 'role_user')->withPivot('id_members', 'id_role')->withTimestamps();
     }
     public function orders()
     {

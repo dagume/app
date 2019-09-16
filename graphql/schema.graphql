@@ -6,14 +6,14 @@ scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 
 type Query {
     #me
-    me: User @auth(guard: "api")
+    me: Contact @auth(guard: "api")
     #Query proyectos
-    filterName_Project(name: String! @where(operator: "like")): [Project] @all(model: "App\\Project") #@middleware(checks:["auth:api"])
-    project(name: String!): Project @find(model: "App\\Project") #@middleware(checks:["auth:api"])
-    proyect_type(id_proyect_type: Int!): [Project] @find(model: "App\\Project") #@middleware(checks:["auth:api"])
-    parent(id_parent: Int!): [Project] @find(model: "App\\Project") #@middleware(checks:["auth:api"])
-    projects: [Project!]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])
-    projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
+    filterName_Project(name: String! @where(operator: "like")): [Project] @all(model: "App\\Project") @middleware(checks:["auth:api"])
+    project(name: String!): Project @find(model: "App\\Project") @middleware(checks:["auth:api"])
+    project_type(id_project_type: Int!): [Project] @find(model: "App\\Project") @middleware(checks:["auth:api"])
+    parent(id_parent: Int!): [Project] @find(model: "App\\Project") @middleware(checks:["auth:api"])
+    projects: [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api"])
+    projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") @middleware(checks:["auth:api"])
     #Query Contacts
     filterName_Contact(name: String! @where(operator: "like")): Contact @find(model: "App\\User") #@middleware(checks:["auth:api"])
     contact(name: String! @eq): Contact @find(model: "App\\User") #@middleware(checks:["auth:api"])
@@ -24,13 +24,13 @@ type Query {
    # users: [User!]! @all(model: "App\\User") @middleware(checks:["auth:api"])
    # users_paginator: [User]! @paginate(type: "paginator" model: "App\\User") @middleware(checks:["auth:api"])
     #Query roles
-    role(name: String! @eq): Role @find(model: "Spatie\\Permission\\Models\\Role") #@middleware(checks:["auth:api"])
-    roles: [Role!]! @all(model: "Spatie\\Permission\\Models\\Role") #@middleware(checks:["auth:api"])
-    roles_paginator: [Role]! @paginate(type: "paginator" model: "Spatie\\Permission\\Models\\Role") #@middleware(checks:["auth:api"])
+    role(name: String! @eq): Role @find(model: "Caffeinated\\Shinobi\\Models\\Role") #@middleware(checks:["auth:api"])
+    roles: [Role!]! @all(model: "Caffeinated\\Shinobi\\Models\\Role") #@middleware(checks:["auth:api"])
+    roles_paginator: [Role]! @paginate(type: "paginator" model: "Caffeinated\\Shinobi\\Models\\Role") #@middleware(checks:["auth:api"])
     #Query permissions
-    permission(name: String! @eq): Permission @find(model: "Spatie\\Permission\\Models\\Permission") #@middleware(checks:["auth:api"])
-    permissions: [Permission!]! @all(model: "Spatie\\Permission\\Models\\Permission") #@middleware(checks:["auth:api"])
-    permissions_paginator: [Permission]! @paginate(type: "paginator" model: "Spatie\\Permission\\Models\\Permission") #@middleware(checks:["auth:api"])
+    permission(name: String! @eq): Permission @find(model: "Caffeinated\\Shinobi\\Models\\Permission") #@middleware(checks:["auth:api"])
+    permissions: [Permission!]! @all(model: "Caffeinated\\Shinobi\\Models\\Permission") #@middleware(checks:["auth:api"])
+    permissions_paginator: [Permission]! @paginate(type: "paginator" model: "Caffeinated\\Shinobi\\Models\\Permission") #@middleware(checks:["auth:api"])
     #Members
     members: [Member] @paginate(type: "paginator" model: "App\\Member") #@middleware(checks:["auth:api"])
     #Categories
@@ -124,6 +124,9 @@ type Contact {
     web_site:String
     password: String
     remember_token:String
+    roles: [Role]
+    contacts: [Contact]
+    member:[Member]
 }
 #tipos de contacto
 enum contactType{
@@ -140,15 +143,15 @@ enum contactIdType{
 
 #tipos de proyecto
 type Project_type {
-    id_proyect_type:ID!
+    id_project_type:ID!
     name_project_type:String!
     description_project_type:String
 }
 #Proyecto
 type Project {
     id_project: ID!
-    id_proyect_type:Project_type!
-    parent_project:Project
+    id_project_type:Project_type!
+    id_parent:Project
     name: String!
     start_date: Date!
     end_date: Date!
@@ -166,13 +169,13 @@ type Project {
 }
 #Tipos proyecto
 enum typeProject {
-    publico
-    privado
+    publico @enum(value: 0)
+    privado @enum(value: 1)
 }
 #association proyecto
 enum associationProject {
-    consosrcio
-    APP
+    consosrcio @enum(value: 0)
+    APP @enum(value: 1)
 }
 #Estados proyecto
 enum statesProject {
@@ -192,26 +195,17 @@ enum parentProject {
 type Role {
   id: ID!
   name: String!
-  guard_name: String!
-  created_at: Date!
-  updated_at: Date!
+  slug: String!
+  description: String
+  special: String
   permissions: [Permission]
 }
 
 type Permission {
-  id: ID!
-  name: String!
-  guard_name: String!
-  created_at: Date!
-  updated_at: Date!
-}
-
-type User {
     id: ID!
     name: String!
-    email: String!
-    roles: [Role]
-
+    slug: String!
+    description: String
 }
 
 input LoginInput {
@@ -228,7 +222,7 @@ type AuthPayload {
     refresh_token: String!
     expires_in: Int!
     token_type: String!
-    user: User!
+    contact: Contact!
 }
 
 type RefreshTokenPayload {
@@ -269,7 +263,7 @@ type Mutation {
     ########################projects
     #Crear Proyecto
     createProject(
-        id_proyect_type: Int @rules(apply: ["integer","required"])
+        id_project_type: Int @rules(apply: ["integer","required"])
         id_parent: parentProject @rules(apply: ["integer"])
         name: String @rules(apply: ["required", "max:255","unique:projects,name"])
         start_date: Date @rules(apply: ["required", "date"])
@@ -300,6 +294,7 @@ type Mutation {
     ######################Contacts
     createContact(
         id_parent_contact: Int @rules(apply: ["integer"])
+        id_role: Int! @rules(apply: ["required", "integer"])
         type: contactType @rules(apply: ["required", "integer"])
         name: String @rules(apply: ["required", "max:255"])
         lastname: String @rules(apply: ["max:255"])
