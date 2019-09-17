@@ -17,8 +17,8 @@ class Project_type extends Model
         'description_project_type',
     ];
 
-    public function Projects()
+    public function projects()
     {
-        return $this->hasMany('App\Project', 'id_proyect_type');
+        return $this->hasMany('App\Project', 'id_project_type', 'id_project_type');
     }
 }

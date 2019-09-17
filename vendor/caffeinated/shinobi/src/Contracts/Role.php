@@ -3,6 +3,7 @@
 namespace Caffeinated\Shinobi\Contracts;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 interface Role
 {
@@ -11,7 +12,8 @@ interface Role
      *
      * @return Model
      */
-    public function users(): BelongsToMany;
+    public function users(): HasMany;
+    //public function users(): BelongsToMany;
 
     public function hasPermissionFlags(): bool;
     public function hasPermissionThroughFlag(): bool;

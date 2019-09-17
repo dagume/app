@@ -39,7 +39,10 @@ class User extends Authenticatable
     //Relacion con ordenes
     //Relacion con cotizacion
     //Relacion con cuentas
-    //Relacion con Roles
+    public function role()
+    {
+        return $this->belongsTo('Caffeinated\Shinobi\Models\Role', 'id_role');
+    }
     public function members(){
         return $this-HasMany(Member::class);
     }

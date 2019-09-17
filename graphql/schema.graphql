@@ -8,12 +8,14 @@ type Query {
     #me
     me: Contact @auth(guard: "api")
     #Query proyectos
-    filterName_Project(name: String! @where(operator: "like")): [Project] @all(model: "App\\Project") @middleware(checks:["auth:api"])
-    project(name: String!): Project @find(model: "App\\Project") @middleware(checks:["auth:api"])
-    project_type(id_project_type: Int!): [Project] @find(model: "App\\Project") @middleware(checks:["auth:api"])
-    parent(id_parent: Int!): [Project] @find(model: "App\\Project") @middleware(checks:["auth:api"])
+    filterName_Project(name: String! @where(operator: "like")): [Project] @all(model: "App\\Project") #@middleware(checks:["auth:api"])
+    project(name: String!): Project @find(model: "App\\Project") #@middleware(checks:["auth:api"])
     projects: [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api"])
-    projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") @middleware(checks:["auth:api"])
+    projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
+    #Query Project_type
+    filterName_Project_type(name_project_type: String! @where(operator: "like")): [Project_type] @all(model: "App\\Project_type") #@middleware(checks:["auth:api"])
+    Project_type(name_project_type: String!): Project_type @find(model: "App\\Project_type") #@middleware(checks:["auth:api"])
+    Projects_type: [Project_type!]! @all(model: "App\\Project_type")# @middleware(checks:["auth:api"])
     #Query Contacts
     filterName_Contact(name: String! @where(operator: "like")): Contact @find(model: "App\\User") #@middleware(checks:["auth:api"])
     contact(name: String! @eq): Contact @find(model: "App\\User") #@middleware(checks:["auth:api"])
@@ -144,26 +146,26 @@ enum contactIdType{
 #tipos de proyecto
 type Project_type {
     id_project_type:ID!
-    name_project_type:String!
+    name_project_type:String
     description_project_type:String
 }
 #Proyecto
 type Project {
     id_project: ID!
-    id_project_type:Project_type!
+    project_type:Project_type
     id_parent:Project
     name: String!
-    start_date: Date!
-    end_date: Date!
+    start_date: Date
+    end_date: Date
     description: String
-    contract_value: Int!
-    expenses: Int!
-    process: Int!
+    contract_value: Int
+    expenses: Int
+    process: Int
     state: String
     place:String
     address:String
-    type:typeProject!
-    association:associationProject!
+    type:typeProject
+    association:associationProject
     consortium_name:String
     members: [Member]
 }

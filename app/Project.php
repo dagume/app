@@ -13,7 +13,7 @@ class Project extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'id_proyect_type',
+        'id_project_type',
         'id_parent',
         'name',
         'start_date',
@@ -29,9 +29,9 @@ class Project extends Model
         'association',
         'consortium_name',
     ];
-    public function Project_type()
+    public function project_type()
     {
-        return $this->belongsTo('App\Project_type', 'id_proyect_type', 'id_proyect_type');
+        return $this->belongsTo('App\Project_type', 'id_project_type', 'id_project_type');
     }
     public function members()
     {

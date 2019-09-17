@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Caffeinated\Shinobi\Concerns\HasPermissions;
 use Caffeinated\Shinobi\Contracts\Role as RoleContract;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Role extends Model implements RoleContract
 {
@@ -36,10 +37,14 @@ class Role extends Model implements RoleContract
      *
      * @return Model
      */
-    public function users(): BelongsToMany
+    public function users(): HasMany
     {
-        return $this->belongsToMany(config('auth.model') ?: config('auth.providers.users.model'))->withTimestamps();
+        return $this->hasMany('App\User', 'id_role');
     }
+    //public function users(): BelongsToMany
+    //{
+    //    return $this->belongsToMany(config('auth.model') ?: config('auth.providers.users.model'))->withTimestamps();
+    //}
 
     /**
      * Determine if role has permission flags.
