@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Permission\Models\Role;
 
 class Member extends Model
 {
@@ -34,10 +33,6 @@ class Member extends Model
     public function roles()
     {
         return $this->belongsToMany('Caffeinated\Shinobi\Models\Role', 'role_user')->withPivot('id_members', 'id_role')->withTimestamps();
-    }
-    public function orders()
-    {
-        return $this->hasMany('App\Order', 'id_members');
     }
 
 }

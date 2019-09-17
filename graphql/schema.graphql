@@ -102,11 +102,10 @@ type Member{
     id_members:ID!
     project:Project!
     contact:Contact!
-    rol:Role!
+    roles:[Role!]!
     hours_week:Int
     hours_month:Int
     state:Int!
-    orders:[Order]
 }
 #Contact
 type Contact {
@@ -126,7 +125,7 @@ type Contact {
     web_site:String
     password: String
     remember_token:String
-    roles: [Role]
+    role: Role
     contacts: [Contact]
     member:[Member]
 }
@@ -301,7 +300,7 @@ type Mutation {
         name: String @rules(apply: ["required", "max:255"])
         lastname: String @rules(apply: ["max:255"])
         identification_type: contactIdType @rules(apply: ["required"])
-        identification_number: Int @rules(apply: ["required"])
+        identification_number: Int @rules(apply: ["required","unique:contacts,identification_number"])
         email: String @rules(apply: ["required", "max:255"])
         phones:String @rules(apply: ["max:30"])
         state:Int = 1
@@ -312,12 +311,12 @@ type Mutation {
         password: String @bcrypt @rules(apply: ["min:8"])
     ): Contact @create(model: "App\\User")
 
-    updatePerson(
+    updateContact(
         id_contact: ID! @rules(apply: ["required"])
         name: String @rules(apply: ["required", "max:255"])
         lastname: String @rules(apply: ["max:255"])
         identification_type: contactIdType @rules(apply: ["integer"])
-        identification_number: Int @rules(apply: ["required"])
+        identification_number: Int @rules(apply: ["required","unique:contacts,identification_number"])
         email: String @rules(apply: ["required", "max:255"])
         phones:String @rules(apply: ["max:30"])
         state:Int @rules(apply: ["required"])
