@@ -41,14 +41,14 @@ class Role extends Model implements RoleContract
     {
         return $this->hasMany('App\User', 'id_role');
     }
-    //public function members(): BelongsToMany
-    //{
-    //    return $this->belongsToMany('App\Member', 'role_user')->withPivot('id_members', 'id_role')->withTimestamps();
-    //}
     public function members(): BelongsToMany
     {
-        return $this->belongsToMany(config('auth.model') ?: config('auth.providers.members.model'))->withTimestamps();
+        return $this->belongsToMany('App\Member', 'role_user', 'id_role', 'id_members')->withTimestamps();
     }
+    //public function members(): BelongsToMany
+    //{
+    //    return $this->belongsToMany(config('auth.model') ?: config('auth.providers.members.model'))->withTimestamps();
+    //}
 
     /**
      * Determine if role has permission flags.

@@ -28,11 +28,11 @@ class Member extends Model
     }
     public function contact()
     {
-        return $this->belongsTo('App\Contact', 'id_contact', 'id_contact');
+        return $this->belongsTo('App\User', 'id_contact', 'id_contact');
     }
     public function roles()
     {
-        return $this->belongsToMany('Caffeinated\Shinobi\Models\Role', 'role_user')->withPivot('id_members', 'id_role')->withTimestamps();
+        return $this->belongsToMany('Caffeinated\Shinobi\Models\Role', 'role_user', 'id_role', 'id_members')->withTimestamps();
     }
 
 }
