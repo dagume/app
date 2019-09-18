@@ -17,7 +17,7 @@ type Query {
     Project_type(name_project_type: String!): Project_type @find(model: "App\\Project_type") #@middleware(checks:["auth:api"])
     Projects_type: [Project_type!]! @all(model: "App\\Project_type")# @middleware(checks:["auth:api"])
     #Query Contacts
-    filterName_Contact(name: String! @where(operator: "like")): Contact @find(model: "App\\User") #@middleware(checks:["auth:api"])
+    filterName_Contact(name: String! @where(operator: "like")): [Contact] @all(model: "App\\User") #@middleware(checks:["auth:api"])
     contact(name: String! @eq): Contact @find(model: "App\\User") #@middleware(checks:["auth:api"])
     contacts: [Contact!]! @all(model: "App\\User")  #@middleware(checks:["auth:api"])
     contacts_paginator: [Contact]! @paginate(type: "paginator" model: "App\\User") #@middleware(checks:["auth:api"])
@@ -40,6 +40,7 @@ type Query {
     categories: [Category!]! @all(model: "App\\Category") #@middleware(checks:["auth:api"])
     categories_paginator: [Category] @paginate(type: "paginator" model: "App\\Category")#@middleware(checks:["auth:api"])
     #Products
+    filterName_Product(name: String! @where(operator: "like")): [Product] @all(model: "App\\Product") #@middleware(checks:["auth:api"])
     product(name: String! @eq): Product @find(model: "App\\Product")#@middleware(checks:["auth:api"])
     products: [Product!]! @all(model: "App\\Product")#@middleware(checks:["auth:api"])
     products_paginator: [Product] @paginate(type: "paginator" model: "App\\Product")#@middleware(checks:["auth:api"])
