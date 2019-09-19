@@ -11,8 +11,11 @@ type Query {
     filterName_Project(name: String! @where(operator: "like")): [Project] @all(model: "App\\Project") #@middleware(checks:["auth:api"])
     project(name: String!): Project @find(model: "App\\Project") #@middleware(checks:["auth:api"])
     projects: [Project!]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])
-    projectsParent(id_parent: Int @where(operator: "!=")): [Project!]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])
     projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
+
+    projectsWithParent(id_parent: Int @where(operator: "!=")): [Project!]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])
+    projects_paginatorWithParent(id_parent: Int @where(operator: "!=")): [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
+
     #Query Project_type
     filterName_Project_type(name_project_type: String! @where(operator: "like")): [Project_type] @all(model: "App\\Project_type") #@middleware(checks:["auth:api"])
     Project_type(name_project_type: String!): Project_type @find(model: "App\\Project_type") #@middleware(checks:["auth:api"])

@@ -39,6 +39,6 @@ class Project extends Model
     }
     public function parent_project()
     {
-        return $this->belongsTo('App\Project', 'id_parent', 'id_project');
+        return $this->hasMany('App\Project', 'id_parent', 'id_project');
     }
 }
