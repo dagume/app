@@ -157,7 +157,7 @@ type Project_type {
 type Project {
     id_project: ID!
     project_type:Project_type
-    id_parent:Project
+    parent_project:Project
     name: String!
     start_date: Date
     end_date: Date
