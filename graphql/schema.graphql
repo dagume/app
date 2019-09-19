@@ -266,7 +266,7 @@ type Mutation {
     ########################projects
     #Crear Proyecto
     createProject(
-        id_project_type: Int @rules(apply: ["integer"])
+        id_project_type: Int @rules(apply: ["integer","required"])
         id_parent: parentProject @rules(apply: ["integer"])
         name: String @rules(apply: ["required", "max:255","unique:projects,name"])
         start_date: Date @rules(apply: ["date"])
