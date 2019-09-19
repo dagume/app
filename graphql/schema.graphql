@@ -268,15 +268,15 @@ type Mutation {
         id_project_type: Int @rules(apply: ["integer","required"])
         id_parent: parentProject @rules(apply: ["integer"])
         name: String @rules(apply: ["required", "max:255","unique:projects,name"])
-        start_date: Date @rules(apply: ["required", "date"])
-        end_date: Date @rules(apply: ["required", "date"])
+        start_date: Date @rules(apply: ["date"])
+        end_date: Date @rules(apply: ["date"])
         description: String @rules(apply: ["nullable"])
-        contract_value: Int @rules(apply: ["required"])
+        contract_value: Int
         state: String = "seleccion"
         place: String
         address: String
-        type: typeProject @rules(apply: ["required"])
-        association: associationProject @rules(apply: ["required"])
+        type: typeProject
+        association: associationProject
         consortium_name:String
     ): Project @create(model: "App\\Project") #@middleware(checks:["auth:api"])
     #Editar Proyecto
