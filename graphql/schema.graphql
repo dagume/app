@@ -10,7 +10,8 @@ type Query {
     #Query proyectos
     filterName_Project(name: String! @where(operator: "like")): [Project] @all(model: "App\\Project") #@middleware(checks:["auth:api"])
     project(name: String!): Project @find(model: "App\\Project") #@middleware(checks:["auth:api"])
-    projects: [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api"])
+    projects: [Project!]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])
+    projectsParent(id_parent: Int @where(operator: "!=")): [Project!]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])
     projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
     #Query Project_type
     filterName_Project_type(name_project_type: String! @where(operator: "like")): [Project_type] @all(model: "App\\Project_type") #@middleware(checks:["auth:api"])
@@ -265,7 +266,7 @@ type Mutation {
     ########################projects
     #Crear Proyecto
     createProject(
-        id_project_type: Int @rules(apply: ["integer","required"])
+        id_project_type: Int @rules(apply: ["integer"])
         id_parent: parentProject @rules(apply: ["integer"])
         name: String @rules(apply: ["required", "max:255","unique:projects,name"])
         start_date: Date @rules(apply: ["date"])
@@ -296,12 +297,12 @@ type Mutation {
     ######################Contacts
     createContact(
         id_parent_contact: Int @rules(apply: ["integer"])
-        id_role: Int! @rules(apply: ["required", "integer"])
+        id_role: Int! @rules(apply: ["integer"])
         type: contactType @rules(apply: ["required", "integer"])
         name: String @rules(apply: ["required", "max:255"])
         lastname: String @rules(apply: ["max:255"])
-        identification_type: contactIdType @rules(apply: ["required"])
-        identification_number: Int @rules(apply: ["required","unique:contacts,identification_number"])
+        identification_type: contactIdType
+        identification_number: Int @rules(apply: ["unique:contacts,identification_number"])
         email: String @rules(apply: ["required", "max:255"])
         phones:String @rules(apply: ["max:30"])
         state:Int = 1
