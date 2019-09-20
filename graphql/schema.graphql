@@ -9,7 +9,7 @@ type Query {
     me: Contact @auth(guard: "api")
     #Query proyectos
     filterName_Project(name: String! @where(operator: "like")): [Project] @all(model: "App\\Project") #@middleware(checks:["auth:api"])
-    project(name: String!): Project @find(model: "App\\Project") #@middleware(checks:["auth:api"])
+    project(name: String! @eq): Project @find(model: "App\\Project") #@middleware(checks:["auth:api"])
     projects: [Project!]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])
     projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
 
