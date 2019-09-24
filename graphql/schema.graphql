@@ -61,32 +61,25 @@ type Detail{
     product:Product!
     order:Order!
     quantity:Int!
-    value:Int!
-    cost:Int!
+    value:Int
     measure:String
+    delivery_amount:Int
+    subtotal:Int
 }
 #Ordenes
 type Order{
     id_order:ID!
-    member:Member!
-    secuence:Int!
+    contact:Contact
     name:String!
-    code:String!
+    code:String
     application_date: Date!
-    state: String!
+    state: String#!
     description:String
-    quotation_date:Date
-    authorization:String!
-    authorization_date:Date
-    delivery_term:String
-    payment_method:String
     delivery_site:String
-    offer_validity:Int
-    observations:String
-    advisor_id:Int
-    sender_id:Int!
-    transport:Int
-    details:[Detail!]!
+    sender_data__:Contact
+    subtotal:Int
+    total:Int
+    details:[Detail]
 }
 #Productos
 type Product{
@@ -361,32 +354,31 @@ type Mutation {
         name: String! @rules(apply: ["required", "max:255"])
         description: String @rules(apply: ["max:255"])
     ): Product @update(model: "App\\Product")
-    #order
-    createOrder(
-        id_members: Int! @rules(apply: ["required","integer"])
+    #SolicitudCotizacon
+    createApplication(
         name: String! @rules(apply: ["required", "max:255"])
-        code: String! @rules(apply: ["required","max:255"])
+        code:String!
+        application_date: Date! @rules(apply: ["required", "date"])
+        state: String = "Application"
         description: String @rules(apply: ["max:255"])
-        date_order: Date! @rules(apply: ["required", "date", "before:tomorrow"])
-        notes: String @rules(apply: ["max:255"])
-    ): Order @create(model: "App\\Order")
-    updateOrder(
-        id_order:ID! @rules(apply:["required"])
-        id_members: Int! @rules(apply: ["required","integer"])
-        name: String! @rules(apply: ["required", "max:255"])
-        code: String! @rules(apply: ["required","max:255"])
-        description: String @rules(apply: ["max:255"])
-        date_order: Date! @rules(apply: ["required", "date", "before:tomorrow"])
-        notes: String @rules(apply: ["max:255"])
-    ): Order @update(model: "App\\Order")
+        __delivery_site:String! @rules(apply: ["max:255"])
+        sender_data__:Int
+        email_contacts:[String]
+    ): Order @field(resolver: "App\\GraphQL\\Mutations\\CreateApplication@resolve")
+    #updateOrder(
+    #    id_order:ID! @rules(apply:["required"])
+    #    id_members: Int! @rules(apply: ["required","integer"])
+    #    name: String! @rules(apply: ["required", "max:255"])
+    #    code: String! @rules(apply: ["required","max:255"])
+    #    description: String @rules(apply: ["max:255"])
+    #    date_order: Date! @rules(apply: ["required", "date", "before:tomorrow"])
+    #    notes: String @rules(apply: ["max:255"])
+    #): Order @update(model: "App\\Order")
     #detail
-    createDetail(
+    createDetailForApplication(
         id_product: Int! @rules(apply: ["required","integer"])
         id_order: Int! @rules(apply: ["required","integer"])
         quantity: Int! @rules(apply: ["required", "integer"])
-        value: Int! @rules(apply: ["required", "integer"])
-        cost: Int! @rules(apply: ["required", "integer"])
-        measure: String @rules(apply: ["max:255"])
     ): Detail @create(model: "App\\Detail")
 }
 

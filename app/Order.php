@@ -13,17 +13,21 @@ class Order extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'id_members',
+        'id_contact',
         'name',
         'code',
+        'application_date',
+        'state',
         'description',
-        'date_order',
-        'notes'
+        'delivery_site',
+        'sender_data__',
+        'subtotal',
+        'total'
     ];
 
-    public function member()
+    public function contact()
     {
-        return $this->belongsTo('App\Member', 'id_members', 'id_members');
+        return $this->belongsTo('App\User', 'id_contact', 'id_contact');
     }
     public function details()
     {
