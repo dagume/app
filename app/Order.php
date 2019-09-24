@@ -31,7 +31,11 @@ class Order extends Model
     }
     public function details()
     {
-        return $this->hasMany('App\Detail', 'id_order');
+        return $this->hasMany('App\Detail', 'id_order', 'id_order');
+    }
+    public function quotations()
+    {
+        return $this->hasMany('App\Quotation', 'id_order', 'id_order');
     }
 
 }

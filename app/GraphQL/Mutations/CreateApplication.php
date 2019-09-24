@@ -5,6 +5,7 @@ namespace App\GraphQL\Mutations;
 use App\User;
 use App\Order;
 use App\Mail\RequestForQuotation;
+use App\Quotation;
 use Illuminate\Support\Facades\Mail;
 use GraphQL\Type\Definition\ResolveInfo;
 use DB;
@@ -24,22 +25,28 @@ class CreateApplication
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         DB::transaction(function () use($args){
-
+            //dd(User::find(1)->email);
             $order = new Order;
             $order->name                = $args['name'];
             $order->code                = $args['code'];
             $order->application_date    = now();
-            //$order->state               = $args['state'];
+            //$order->state             = $args['state'];
             $order->description         = $args['description'];
-            $order->__delivery_site       = $args['__delivery_site'];
+            $order->__delivery_site     = $args['__delivery_site'];
             $order->sender_data__       = auth()->user()->id_contact;
             $order->save();
 
             $emails = $args['email_contacts'];
             foreach ($emails as $ema ) {
-                Mail::to($ema)->send(new RequestForQuotation(User::find(1)));
+                Mail::to(User::find($ema)->email)->send(new RequestForQuotation(User::find(2)));
+                $quotation = new Quotation;
+                $quotation->id_order = (int) Order::max('id_order');
+                $quotation->id_contact = $ema;
+                $quotation->save();
             }
         }, 3);
+
+        //$formulario->Visita_idVisita = (int) Visita::max('idVisita');
         return [
             'status' => 'Correos enviado exitosamente',
             'message' => 'Solicitud Enviada correctamente'

@@ -54,7 +54,15 @@ type Query {
     orders_paginator: [Order] @paginate(type: "paginator" model: "App\\Order")#@middleware(checks:["auth:api"])
 
 }
-
+#Cotizacion
+type Quotation{
+    id_quotation:ID!
+    order:Order!
+    contact:Contact!
+    link:String
+    authorization:Boolean
+    date: Date
+}
 #Detales
 type Detail{
     id_detalle: ID!
@@ -85,6 +93,7 @@ type Order{
     subtotal:Int
     total:Int
     details:[Detail]
+    quotations:[Quotation]
 }
 #Productos
 type Product{
@@ -368,7 +377,7 @@ type Mutation {
         description: String @rules(apply: ["max:255"])
         __delivery_site:String! @rules(apply: ["max:255"])
         sender_data__:Int
-        email_contacts:[String]
+        email_contacts:[Int]
     ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateApplication@resolve") @middleware(checks:["auth:api"])
 
     #updateOrder(

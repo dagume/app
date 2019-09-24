@@ -43,14 +43,20 @@ class User extends Authenticatable
     {
         return $this->belongsTo('Caffeinated\Shinobi\Models\Role', 'id_role');
     }
-    public function members(){
+    public function members()
+    {
         return $this-HasMany(Member::class);
     }
-    public function contact(){
+    public function contact()
+    {
         return $this-BelongsTo(User::class);
     }
     public function orders()
     {
         return $this->hasMany('App\Order', 'id_contact', 'id_contact');
+    }
+    public function quotations()
+    {
+        return $this->hasMany('App\Quotation', 'id_contact', 'id_contact');
     }
 }
