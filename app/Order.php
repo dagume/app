@@ -19,7 +19,7 @@ class Order extends Model
         'application_date',
         'state',
         'description',
-        'delivery_site',
+        '__delivery_site',
         'sender_data__',
         'subtotal',
         'total'

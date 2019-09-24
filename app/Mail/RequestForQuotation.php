@@ -2,7 +2,6 @@
 
 namespace App\Mail;
 
-use App\Contact;
 use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -32,6 +31,8 @@ class RequestForQuotation extends Mailable
      */
     public function build()
     {
-        return $this->view('mails.RequestForQuotation');
+        return $this->from('provisionalapp09@gmail.com', 'APP Control Ingenieria')
+                    ->subject('Solicitud de cotizacion')
+                    ->view('mails.RequestForQuotation');
     }
 }

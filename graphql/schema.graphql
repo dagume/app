@@ -66,6 +66,11 @@ type Detail{
     delivery_amount:Int
     subtotal:Int
 }
+#Mensaje de creado Solicitud
+type MessageSuccess {
+    status: String!
+    message: String
+}
 #Ordenes
 type Order{
     id_order:ID!
@@ -358,13 +363,14 @@ type Mutation {
     createApplication(
         name: String! @rules(apply: ["required", "max:255"])
         code:String!
-        application_date: Date! @rules(apply: ["required", "date"])
-        state: String = "Application"
+        application_date: Date @rules(apply: ["date"])
+        #state: String = "Open"
         description: String @rules(apply: ["max:255"])
         __delivery_site:String! @rules(apply: ["max:255"])
         sender_data__:Int
         email_contacts:[String]
-    ): Order @field(resolver: "App\\GraphQL\\Mutations\\CreateApplication@resolve")
+    ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateApplication@resolve") @middleware(checks:["auth:api"])
+
     #updateOrder(
     #    id_order:ID! @rules(apply:["required"])
     #    id_members: Int! @rules(apply: ["required","integer"])

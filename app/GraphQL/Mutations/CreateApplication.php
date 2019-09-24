@@ -2,11 +2,12 @@
 
 namespace App\GraphQL\Mutations;
 
-use App\Contact;
 use App\User;
+use App\Order;
 use App\Mail\RequestForQuotation;
 use Illuminate\Support\Facades\Mail;
 use GraphQL\Type\Definition\ResolveInfo;
+use DB;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class CreateApplication
@@ -22,11 +23,26 @@ class CreateApplication
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
+        DB::transaction(function () use($args){
 
-        dd($args);
-        $contact = User::pluck('email');
-        Mail::to($contact)->send(new RequestForQuotation(User::find(1)));
-        return 'A message has been sent to Mailtrap!';
+            $order = new Order;
+            $order->name                = $args['name'];
+            $order->code                = $args['code'];
+            $order->application_date    = now();
+            //$order->state               = $args['state'];
+            $order->description         = $args['description'];
+            $order->__delivery_site       = $args['__delivery_site'];
+            $order->sender_data__       = auth()->user()->id_contact;
+            $order->save();
 
+            $emails = $args['email_contacts'];
+            foreach ($emails as $ema ) {
+                Mail::to($ema)->send(new RequestForQuotation(User::find(1)));
+            }
+        }, 3);
+        return [
+            'status' => 'Correos enviado exitosamente',
+            'message' => 'Solicitud Enviada correctamente'
+        ];
     }
 }
