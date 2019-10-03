@@ -54,6 +54,10 @@ type Query {
     orders_paginator: [Order] @paginate(type: "paginator" model: "App\\Order")#@middleware(checks:["auth:api"])
 
 }
+#Mensaje de creado de folder
+type MessageSuccessFolder {
+    folder: String
+}
 #Cotizacion
 type Quotation{
     id_quotation:ID!
@@ -395,6 +399,8 @@ type Mutation {
         id_order: Int! @rules(apply: ["required","integer"])
         quantity: Int! @rules(apply: ["required", "integer"])
     ): Detail @create(model: "App\\Detail")
+    
+    createFolder: MessageSuccessFolder @field(resolver: "App\\GraphQL\\Mutations\\CreateProject@resolve") #@middleware(checks:["auth:api"])
 }
 
 
