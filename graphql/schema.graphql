@@ -54,6 +54,20 @@ type Query {
     orders_paginator: [Order] @paginate(type: "paginator" model: "App\\Order")#@middleware(checks:["auth:api"])
 
 }
+#Actividades
+type Activity{
+    id_activity:ID!
+    project:Project
+    name:String
+    description:String
+    date_start:Date
+    date_end:Date
+    state:String
+    process:Float
+    type:String
+    duration:Float
+    priority:Int
+}
 #Mensaje de creado de folder
 type MessageSuccessFolder {
     folder: String
@@ -182,6 +196,7 @@ type Project {
     type:typeProject
     association:associationProject
     consortium_name:String
+    id_folder: String
     members: [Member]
 }
 #Tipos proyecto
@@ -191,7 +206,7 @@ enum typeProject {
 }
 #association proyecto
 enum associationProject {
-    consosrcio @enum(value: 0)
+    consorcio @enum(value: 0)
     APP @enum(value: 1)
 }
 #Estados proyecto
@@ -281,7 +296,7 @@ type Mutation {
     #Crear Proyecto
     createProject(
         id_project_type: Int @rules(apply: ["integer","required"])
-        id_parent: parentProject @rules(apply: ["integer"])
+        id_parent: parentProject
         name: String @rules(apply: ["required", "max:255","unique:projects,name"])
         start_date: Date @rules(apply: ["date"])
         end_date: Date @rules(apply: ["date"])
@@ -293,7 +308,8 @@ type Mutation {
         type: typeProject
         association: associationProject
         consortium_name:String
-    ): Project @create(model: "App\\Project") #@middleware(checks:["auth:api"])
+        id_folder: String
+    ): Project  @field(resolver: "App\\GraphQL\\Mutations\\CreateProject@resolve") #@middleware(checks:["auth:api"])
     #Editar Proyecto
     updateProject(
         id_project: ID! @rules(apply: ["required"])
@@ -399,8 +415,32 @@ type Mutation {
         id_order: Int! @rules(apply: ["required","integer"])
         quantity: Int! @rules(apply: ["required", "integer"])
     ): Detail @create(model: "App\\Detail")
-    
+
     createFolder: MessageSuccessFolder @field(resolver: "App\\GraphQL\\Mutations\\CreateProject@resolve") #@middleware(checks:["auth:api"])
+
+    #Crear actividad
+    createActivity(
+        id_project: Int @rules(apply: ["integer","required"])
+        name: String @rules(apply: ["required", "max:255","unique:activities,name"])
+        description: String @rules(apply: ["nullable"])
+        date_start: Date @rules(apply: ["date"])
+        date_end: Date @rules(apply: ["date"])
+        state: String @rules(apply: ["required", "max:5"])
+        process:Float
+        type:String
+        duration:Float
+        priority:Int
+    ): Activity @create(model: "App\\Activity") #@middleware(checks:["auth:api"])
+
+    #Editar Proyecto
+    updateProject(
+        id_activity: ID! @rules(apply: ["required"])
+        name: String @rules(apply: ["required", "max:255","unique:activities,name"])
+        description: String @rules(apply: ["nullable"])
+        date_start: Date @rules(apply: ["date"])
+        date_end: Date @rules(apply: ["date"])
+    ): Activity @update(model: "App\\Activity") #@middleware(checks:["auth:api"])
+
 }
 
 

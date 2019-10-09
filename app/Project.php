@@ -28,6 +28,7 @@ class Project extends Model
         'type',
         'association',
         'consortium_name',
+        'id_folder',
     ];
     public function project_type()
     {
@@ -40,5 +41,9 @@ class Project extends Model
     public function parent_project()
     {
         return $this->belongsTo('App\Project', 'id_parent', 'id_project');
+    }
+    public function activities()
+    {
+        return $this->hasMany('App\Activity', 'id_project');
     }
 }

@@ -14,11 +14,6 @@ use Hypweb\Flysystem\GoogleDrive\GoogleDriveAdapter;
 
 class CreateProject
 {
-            //env('GOOGLE_DRIVE_CLIENT_ID'),
-            //'clientSecret' => env('GOOGLE_DRIVE_CLIENT_SECRET'),
-            //'refreshToken' => env('GOOGLE_DRIVE_REFRESH_TOKEN'),
-            //'folderId' => env('GOOGLE_DRIVE_FOLDER_ID'),
-
     //Correo APP
     //protected $client;
     //protected $folder_id = '12WUUWP1sZfC3cxhhcBFwJS7qWhzqqbTG';
@@ -39,7 +34,6 @@ class CreateProject
 
     public function __construct()
     {
-        dd(Storage::disk('google'));
         $this->client = new \Google_Client();
         $this->client->setClientId($this->ClientId);
         $this->client->setClientSecret($this->ClientSecret);
@@ -58,26 +52,29 @@ class CreateProject
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         $fileMetadata = new \Google_Service_Drive_DriveFile([
-            'name'     => 'project 2',
+            'name'     => $args['name'],
             'mimeType' => 'application/vnd.google-apps.folder',
             'parents' => [$this->folder_id ],
         ]);
 
         $folder = $this->service->files->create($fileMetadata, ['fields' => 'id']);
-        return [
-            'folder' =>$folder->id
-        ];
-    //    return Project::create([
-    //        'name'          => $args['name'],
-    //        'start_date'    => $args['start_date'],
-    //        'closing_date'  => $args['closing_date'],
-    //        'description'   => $args['description'],
-    //        'budget'        => $args['budget'],
-    //        'execution'     => $args['execution'],
-    //        'advance'       => $args['advance'],
-    //        'execution'     => $args['execution'],
-    //        'category'      => $args['category'],
-    //        'state'         => $args['state'],
-    //    ]);
+
+        $project = new Project;
+        $project->id_project_type   =$args['id_project_type'];
+        $project->id_parent         =$args['id_parent'];
+        $project->name              =$args['name'];
+        $project->start_date        =$args['start_date'];
+        $project->end_date          =$args['end_date'];
+        $project->description       =$args['description'];
+        $project->contract_value    =$args['contract_value'];
+        $project->state             =$args['state'];
+        $project->place             =$args['place'];
+        $project->address           =$args['address'];
+        $project->type              =$args['type'];
+        $project->association       =$args['association'];
+        $project->consortium_name   =$args['consortium_name'];
+        $project->id_folder         =$folder->id;
+        $project->save();
+
     }
 }
