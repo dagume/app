@@ -54,6 +54,11 @@ type Query {
     orders_paginator: [Order] @paginate(type: "paginator" model: "App\\Order")#@middleware(checks:["auth:api"])
 
 }
+#Mensaje de creacion de proyecto
+type MessageSuccessProject {
+    project: Project
+    message: String
+}
 #Actividades
 type Activity{
     id_activity:ID!
@@ -298,8 +303,8 @@ type Mutation {
         id_project_type: Int @rules(apply: ["integer","required"])
         id_parent: parentProject
         name: String @rules(apply: ["required", "max:255","unique:projects,name"])
-        start_date: Date @rules(apply: ["date"])
-        end_date: Date @rules(apply: ["date"])
+        start_date: Date @rules(apply: ["nullable","date"])
+        end_date: Date @rules(apply: ["nullable","date"])
         description: String @rules(apply: ["nullable"])
         contract_value: Int
         state: String = "seleccion"
@@ -309,7 +314,7 @@ type Mutation {
         association: associationProject
         consortium_name:String
         id_folder: String
-    ): Project  @field(resolver: "App\\GraphQL\\Mutations\\CreateProject@resolve") #@middleware(checks:["auth:api"])
+    ): MessageSuccessProject @field(resolver: "App\\GraphQL\\Mutations\\CreateProject@resolve") #@middleware(checks:["auth:api"])
     #Editar Proyecto
     updateProject(
         id_project: ID! @rules(apply: ["required"])

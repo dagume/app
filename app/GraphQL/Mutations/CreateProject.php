@@ -75,6 +75,9 @@ class CreateProject
         $project->consortium_name   =$args['consortium_name'];
         $project->id_folder         =$folder->id;
         $project->save();
-
+        return [
+            'project' => $project,
+            'message' => 'Proyecto creado exitosamente'
+        ];
     }
 }
