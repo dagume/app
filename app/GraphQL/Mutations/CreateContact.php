@@ -2,11 +2,17 @@
 
 namespace App\GraphQL\Mutations;
 
+use App\User;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class CreateContact
 {
+    protected $folder_id    = '1bMApYJYghY6pFbNctOCQ9eFoARq8m20u';
+
+    public function __construct(){
+
+    }
     /**
      * Return a value for the field.
      *
@@ -18,6 +24,35 @@ class CreateContact
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        // TODO implement the resolver
+        //DB::transaction(function () use($args){
+            $fileMetadata = new \Google_Service_Drive_DriveFile([
+                'name'     => $args['name'],
+                'mimeType' => 'application/vnd.google-apps.folder',
+                'parents' => [$this->folder_id ],
+            ]);
+            $contact = new User;
+            $contact->id_parent_contact     =$args['id_parent_contact'];
+            $contact->id_role               =$args['id_role'];
+            $contact->type                  =$args['type'];
+            $contact->name                  =$args['name'];
+            $contact->lastname              =$args['lastname'];
+            $contact->identification_type   =$args['identification_type'];
+            $contact->identification_number =$args['identification_number'];
+            $contact->email                 =$args['email'];
+            $contact->phones                =$args['phones'];
+            $contact->state                 =$args['state'];
+            $contact->city                  =$args['city'];
+            $contact->locate                =$args['locate'];
+            $contact->address               =$args['address'];
+            $contact->web_site              =$args['web_site'];
+            $contact->password              =$args['password'];
+            $folder = Conection_Drive()->files->create($fileMetadata, ['fields' => 'id']);
+            $contact->id_folder             =$folder->id;
+            $contact->save();
+            return [
+                'contact' => $contact,
+                'message' => 'Proyecto creado exitosamente'
+            ];
+        //}, 3);
     }
 }

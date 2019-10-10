@@ -9,7 +9,7 @@ type Query {
     me: Contact @auth(guard: "api")
     #Query proyectos
     filterName_Project(name: String! @where(operator: "like")): [Project] @all(model: "App\\Project") #@middleware(checks:["auth:api"])
-    project(name: String! @eq): Project @find(model: "App\\Project") #@middleware(checks:["auth:api"])
+    project(name: String! @eq id_project:ID @eq): Project @find(model: "App\\Project") #@middleware(checks:["auth:api"])
     projects: [Project!]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])
     projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
 
@@ -22,7 +22,7 @@ type Query {
     Projects_type: [Project_type!]! @all(model: "App\\Project_type")# @middleware(checks:["auth:api"])
     #Query Contacts
     filterName_Contact(name: String! @where(operator: "like")): [Contact] @all(model: "App\\User") #@middleware(checks:["auth:api"])
-    contact(name: String! @eq): Contact @find(model: "App\\User") #@middleware(checks:["auth:api"])
+    contact(name: String @eq id_contact:ID @eq): Contact @find(model: "App\\User") #@middleware(checks:["auth:api"])
     contacts: [Contact!]! @all(model: "App\\User")  #@middleware(checks:["auth:api"])
     contacts_paginator: [Contact]! @paginate(type: "paginator" model: "App\\User") #@middleware(checks:["auth:api"])
    # #Query Usuarios
@@ -53,6 +53,11 @@ type Query {
     orders: [Order!]! @all(model: "App\\Order")#@middleware(checks:["auth:api"])
     orders_paginator: [Order] @paginate(type: "paginator" model: "App\\Order")#@middleware(checks:["auth:api"])
 
+}
+#Mensaje de creacion de contacto
+type MessageSuccessContact {
+    contact: Contact
+    message: String
 }
 #Mensaje de creacion de proyecto
 type MessageSuccessProject {
@@ -331,14 +336,14 @@ type Mutation {
     ): Project @update(model: "App\\Project") #@middleware(checks:["auth:api"])
     ######################Contacts
     createContact(
-        id_parent_contact: Int @rules(apply: ["integer"])
+        id_parent_contact: Int @rules(apply: ["nullable","integer"])
         id_role: Int! @rules(apply: ["integer"])
         type: contactType @rules(apply: ["required", "integer"])
         name: String @rules(apply: ["required", "max:255"])
         lastname: String @rules(apply: ["max:255"])
         identification_type: contactIdType
         identification_number: Int @rules(apply: ["unique:contacts,identification_number"])
-        email: String @rules(apply: ["required", "max:255"])
+        email: String @rules(apply: ["required", "max:255","unique:contacts,email"])
         phones:String @rules(apply: ["max:30"])
         state:Int = 1
         locate:String @rules(apply: ["max:255"])
@@ -346,7 +351,8 @@ type Mutation {
         address:String @rules(apply: ["max:255"])
         web_site:String @rules(apply: ["max:255"])
         password: String @bcrypt @rules(apply: ["min:8"])
-    ): Contact @create(model: "App\\User")
+    ):  MessageSuccessContact @field(resolver: "App\\GraphQL\\Mutations\\CreateContact@resolve") #@middleware(checks:["auth:api"])
+
 
     updateContact(
         id_contact: ID! @rules(apply: ["required"])

@@ -32,6 +32,7 @@ class User extends Authenticatable
         'address',
         'web_site',
         'password',
+        'id_folder',
     ];
     protected $hidden = [
         'password', 'remember_token',

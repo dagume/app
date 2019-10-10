@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Project_type extends Model
 {
     protected  $table= 'project_type';
-
+    
     protected $primaryKey = 'id_project_type';
 
     public $timestamps = false;

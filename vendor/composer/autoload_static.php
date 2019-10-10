@@ -35,6 +35,7 @@ class ComposerStaticInit97dd7e94a04e4d4346b7962fbe749211
         '801c31d8ed748cfa537fa45402288c95' => __DIR__ . '/..' . '/psy/psysh/src/functions.php',
         '0d8253363903f0ac7b0978dcde4e28a0' => __DIR__ . '/..' . '/beyondcode/laravel-dump-server/helpers.php',
         '377b22b161c09ed6e5152de788ca020a' => __DIR__ . '/..' . '/spatie/laravel-permission/src/helpers.php',
+        'be2dabd89e6571c763d3c521b1c3701e' => __DIR__ . '/../..' . '/app/Helpers.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -550,11 +551,14 @@ class ComposerStaticInit97dd7e94a04e4d4346b7962fbe749211
     );
 
     public static $classMap = array (
+        'App\\Activity' => __DIR__ . '/../..' . '/app/Activity.php',
         'App\\Category' => __DIR__ . '/../..' . '/app/Category.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Detail' => __DIR__ . '/../..' . '/app/Detail.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\GraphQL\\Mutations\\CreateApplication' => __DIR__ . '/../..' . '/app/GraphQL/Mutations/CreateApplication.php',
+        'App\\GraphQL\\Mutations\\CreateContact' => __DIR__ . '/../..' . '/app/GraphQL/Mutations/CreateContact.php',
+        'App\\GraphQL\\Mutations\\CreateFolder' => __DIR__ . '/../..' . '/app/GraphQL/Mutations/CreateFolder.php',
         'App\\GraphQL\\Mutations\\CreateProject' => __DIR__ . '/../..' . '/app/GraphQL/Mutations/CreateProject.php',
         'App\\Http\\Controllers\\Auth\\ForgotPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
         'App\\Http\\Controllers\\Auth\\LoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/LoginController.php',
