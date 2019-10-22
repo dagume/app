@@ -9,7 +9,7 @@ type Query {
     me: Contact @auth(guard: "api")
     #Query proyectos
     filterName_Project(name: String! @where(operator: "like")): [Project] @all(model: "App\\Project") #@middleware(checks:["auth:api"])
-    project(name: String! @eq id_project:ID @eq): Project @find(model: "App\\Project") #@middleware(checks:["auth:api"])
+    project(name: String @eq id_project:ID @eq): Project @find(model: "App\\Project") #@middleware(checks:["auth:api"])
     projects: [Project!]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])
     projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
 
@@ -52,8 +52,20 @@ type Query {
     order(code: String! @eq): Order @find(model: "App\\Order")#@middleware(checks:["auth:api"])
     orders: [Order!]! @all(model: "App\\Order")#@middleware(checks:["auth:api"])
     orders_paginator: [Order] @paginate(type: "paginator" model: "App\\Order")#@middleware(checks:["auth:api"])
-
+    #GlobalSearch
+    #globalSearch(name: String!): [GlobalSearch]
+    #Search(Keyword:String!): [GlobalSearch]
 }
+
+#interface GlobalSearch
+#    @interface(resolveType: "App\\GraphQL\\Interfaces\\GlobalSearch@resolveType"){
+#    id:ID!
+#    name:String!
+#}
+# Busqueda Global
+#union GlobalSearch @union(resolveType: "App\\GraphQL\\Unions\\General@resolveType")
+#    = Contact | Project
+
 #Mensaje de creacion de contacto
 type MessageSuccessContact {
     contact: Contact
@@ -65,7 +77,7 @@ type MessageSuccessProject {
     message: String
 }
 #Actividades
-type Activity{
+type Activity {#implements GlobalSearch{
     id_activity:ID!
     project:Project
     name:String
@@ -124,14 +136,14 @@ type Order{
     quotations:[Quotation]
 }
 #Productos
-type Product{
+type Product {#implements GlobalSearch{
     id_product:ID!
     category:Category!
     name:String!
     description:String
 }
 #Categorias
-type Category{
+type Category {#implements GlobalSearch{
     id_category:ID!
     name:String!
     description:String
@@ -142,13 +154,13 @@ type Member{
     id_members:ID!
     project:Project!
     contact:Contact!
-    roles:[Role!]!
+    roles:[Role]
     hours_week:Int
     hours_month:Int
     state:Int!
 }
 #Contact
-type Contact {
+type Contact {#implements GlobalSearch{
     id_contact:ID!
     id_parent_contact:Int
     type:contactType!
@@ -167,7 +179,7 @@ type Contact {
     remember_token:String
     role: Role
     contacts: [Contact]
-    member:[Member]
+    members:[Member]
 }
 #tipos de contacto
 enum contactType{
@@ -189,7 +201,7 @@ type Project_type {
     description_project_type:String
 }
 #Proyecto
-type Project {
+type Project {#implements GlobalSearch{
     id_project: ID!
     project_type:Project_type
     parent_project:Project
@@ -294,6 +306,7 @@ input NewPasswordWithCodeInput {
     password: String!
     password_confirmation: String!
 }
+
 
 type Mutation {
     #Auth

@@ -37,20 +37,18 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-    //Relacion con ordenes
-    //Relacion con cotizacion
-    //Relacion con cuentas
+    //Falta Relacion con cuentas
     public function role()
     {
         return $this->belongsTo('Caffeinated\Shinobi\Models\Role', 'id_role');
     }
     public function members()
     {
-        return $this-HasMany(Member::class);
+        return $this->hasMany('App\Member', 'id_contact', 'id_contact');
     }
     public function contact()
     {
-        return $this-BelongsTo(User::class);
+        return $this->BelongsTo(User::class);
     }
     public function orders()
     {

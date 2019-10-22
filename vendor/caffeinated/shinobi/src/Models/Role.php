@@ -43,7 +43,8 @@ class Role extends Model implements RoleContract
     }
     public function members(): BelongsToMany
     {
-        return $this->belongsToMany('App\Member', 'role_user', 'id_role', 'id_members')->withTimestamps();
+        return $this->belongsToMany('App\Member', 'role_user', 'id_role', 'id_members')->withTimestamps()->withPivot('id_members');
+
     }
     //public function members(): BelongsToMany
     //{

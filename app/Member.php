@@ -32,7 +32,7 @@ class Member extends Model
     }
     public function roles()
     {
-        return $this->belongsToMany('Caffeinated\Shinobi\Models\Role', 'role_user', 'id_role', 'id_members')->withTimestamps();
+        return $this->belongsToMany('Caffeinated\Shinobi\Models\Role', 'role_user', 'id_role', 'id_members')->withPivot('id_role');
     }
 
 }
