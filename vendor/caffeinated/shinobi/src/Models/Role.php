@@ -2,6 +2,7 @@
 
 namespace Caffeinated\Shinobi\Models;
 
+use App\Member;
 use Illuminate\Database\Eloquent\Model;
 use Caffeinated\Shinobi\Concerns\HasPermissions;
 use Caffeinated\Shinobi\Contracts\Role as RoleContract;
@@ -43,7 +44,7 @@ class Role extends Model implements RoleContract
     }
     public function members(): BelongsToMany
     {
-        return $this->belongsToMany('App\Member', 'role_user', 'id_role', 'id_members')->withTimestamps()->withPivot('id_members');
+        return $this->belongsToMany(Member::class, 'role_user', 'id_members', 'id_role')->withTimestamps();
 
     }
     //public function members(): BelongsToMany

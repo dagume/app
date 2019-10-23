@@ -115,6 +115,10 @@ type Detail{
     subtotal:Int
 }
 #Mensaje de creado Solicitud
+type MessageMember {
+    message: String
+}
+#Mensaje de creado Solicitud
 type MessageSuccess {
     status: String!
     message: String
@@ -366,7 +370,6 @@ type Mutation {
         password: String @bcrypt @rules(apply: ["min:8"])
     ):  MessageSuccessContact @field(resolver: "App\\GraphQL\\Mutations\\CreateContact@resolve") #@middleware(checks:["auth:api"])
 
-
     updateContact(
         id_contact: ID! @rules(apply: ["required"])
         name: String @rules(apply: ["required", "max:255"])
@@ -381,6 +384,7 @@ type Mutation {
         address:String @rules(apply: ["max:255"])
         web_site:String @rules(apply: ["max:255"])
     ): Contact @update(model: "App\\User") #@middleware(checks:["auth:api"])
+
     #member
     member_has_project(
         id_project: Int! @rules(apply: ["integer"])
@@ -389,7 +393,12 @@ type Mutation {
         hours_week: Int  @rules(apply: ["integer"])
         hours_month:Int  @rules(apply: ["integer"])
         state:  Int = 1
-        ):Member @create(model: "App\\Member")
+        ):MessageMember @field(resolver: "App\\GraphQL\\Mutations\\Member_has_project@resolve")
+    #Agregar role a miembro
+    role_to_member(
+        id_role: Int
+        id_members: Int
+    ):MessageMember @field(resolver: "App\\GraphQL\\Mutations\\Role_to_member@resolve")
     #Category
     createCategory(
         name: String @rules(apply: ["required", "max:255"])

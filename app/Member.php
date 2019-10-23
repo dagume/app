@@ -2,11 +2,11 @@
 
 namespace App;
 
+use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Database\Eloquent\Model;
 
 class Member extends Model
 {
-
     protected  $table= 'members';
 
     protected $primaryKey = 'id_members';
@@ -32,7 +32,7 @@ class Member extends Model
     }
     public function roles()
     {
-        return $this->belongsToMany('Caffeinated\Shinobi\Models\Role', 'role_user', 'id_role', 'id_members')->withPivot('id_role');
+        return $this->belongsToMany(Role::class, 'role_user', 'id_members', 'id_role')->withTimestamps();
     }
 
 }
