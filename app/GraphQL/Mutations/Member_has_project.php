@@ -22,7 +22,6 @@ class Member_has_project
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         DB::transaction(function () use($args){
-            //dd(User::find(1)->email);
             $member = new Member;
             $member->id_project     = $args['id_project'];
             $member->id_contact     = $args['id_contact'];
@@ -30,12 +29,8 @@ class Member_has_project
             $member->hours_month    = $args['hours_month'];
             $member->state          = $args['state'];
             $member->save();
-            $role_user = new role_user;
-            $role_user->id_role     = $args['id_rol'];
-            $role_user->id_members  = (int) Member::max('id_members');
-            $role_user->save();
+            $member->roles()->attach($args['id_rol']);
         }, 3);
-        //$formulario->Visita_idVisita = (int) Visita::max('idVisita');
         return [
             'message' => 'Miembro agregado exitosamente'
         ];

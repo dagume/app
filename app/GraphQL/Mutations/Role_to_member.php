@@ -2,7 +2,7 @@
 
 namespace App\GraphQL\Mutations;
 
-use App\role_user;
+use App\Member;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use DB;
@@ -21,10 +21,8 @@ class Role_to_member
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         DB::transaction(function () use($args){
-            $role_user = new role_user;
-            $role_user->id_role     = $args['id_role'];
-            $role_user->id_members     = $args['id_members'];
-            $role_user->save();
+            $member = Member::findOrFail($args['id_members']);
+            $member->roles()->attach($args['id_role']);
         }, 3);
         return [
             'message' => 'se asigno role al miembro'
