@@ -29,9 +29,9 @@ class Activity extends Model
     {
         return $this->belongsTo('App\Project', 'id_project', 'id_project');
     }
-    public function parent_activity()
+    public function activities()
     {
-        return $this->belongsTo('App\Activity', 'id_parent_activity', 'id_activity');
+        return $this->hasMany('App\Activity', 'id_parent_activity', 'id_activity');
     }
 
 

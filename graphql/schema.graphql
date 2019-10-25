@@ -86,7 +86,7 @@ type MessageSuccessProject {
 type Activity { #implements GlobalSearch{
     id_activity:ID!
     project:Project
-    parent_activity:Activity
+    activities:[Activity]
     name:String
     description:String
     date_start:Date
@@ -230,6 +230,7 @@ type Project {#implements GlobalSearch{
     consortium_name:String
     id_folder: String
     members: [Member]
+    activities:[Activity]
 }
 #Tipos proyecto
 enum typeProject {
@@ -460,7 +461,7 @@ type Mutation {
 
     #Crear actividad
     createActivity(
-        id_project: Int @rules(apply: ["integer","required"])
+        id_project: Int @rules(apply: ["integer","nullable"])
         id_parent_activity: Int @rules(apply: ["integer","nullable"])
         name: String @rules(apply: ["required", "max:255","unique:activities,name"])
         description: String @rules(apply: ["nullable"])
