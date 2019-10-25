@@ -14,173 +14,173 @@ class PermissionsTableSeeder extends Seeder
     {
         //contacts
         Permission::create([
-        'name'          => 'listar contacts',
+        'name'          => 'Listar contacts',
         'slug'          => 'contact.list',
         'description'   => 'Lista y navega todos los contacts del sistema',
         ]);
 
         Permission::create([
-        'name'          => 'ver detalle de contact',
+        'name'          => 'Ver detalle de contact',
         'slug'          => 'contact.show',
         'description'   => 'ver en detalle cada contact del sistema',
         ]);
 
         Permission::create([
-            'name'          => 'creacion de contact',
+            'name'          => 'Creacion de contact',
             'slug'          => 'contact.create',
             'description'   => 'crear un contact en el sistema',
             ]);
 
         Permission::create([
-        'name'          => 'edicion de contact',
+        'name'          => 'Edicion de contact',
         'slug'          => 'contact.edit',
         'description'   => 'editar cualquier dato de un contact del sistema',
 
         ]);
         Permission::create([
-        'name'          => 'eliminar contact',
+        'name'          => 'Eliminar contact',
         'slug'          => 'contact.destroy',
-        'description'   => 'eliminar cualquier contact del sistema',
+        'description'   => 'Eliminar cualquier contact del sistema',
 
         ]);
 
         //projects
         Permission::create([
-            'name'          => 'Navegar projects',
+            'name'          => 'Listar projects',
             'slug'          => 'project.list',
             'description'   => 'Lista y navega tods los projects del sistema',
             ]);
 
             Permission::create([
-            'name'          => 'ver detalle de project',
+            'name'          => 'Ver detalle de project',
             'slug'          => 'project.show',
             'description'   => 'ver en detalle cada project del sistema',
             ]);
 
             Permission::create([
-                'name'          => 'creacion de project',
+                'name'          => 'Creacion de project',
                 'slug'          => 'project.create',
                 'description'   => 'crear un project en el sistema',
                 ]);
 
             Permission::create([
-            'name'          => 'edicion de project',
+            'name'          => 'Edicion de project',
             'slug'          => 'project.edit',
             'description'   => 'editar cualquier dato de un project del sistema',
 
             ]);
             Permission::create([
-            'name'          => 'eliminar project',
+            'name'          => 'Eliminar project',
             'slug'          => 'project.destroy',
-            'description'   => 'eliminar cualquier project del sistema',
+            'description'   => 'Eliminar cualquier project del sistema',
 
             ]);
 
         //roles
         Permission::create([
-        'name'          => 'Navegar roles',
+        'name'          => 'Listar roles',
         'slug'          => 'role.list',
         'description'   => 'Lista y navega todos los roles del sistema',
         ]);
 
         Permission::create([
-        'name'          => 'ver detalle del role',
+        'name'          => 'Ver detalle del role',
         'slug'          => 'role.show',
         'description'   => 'ver en detalle cada role del sistema',
         ]);
 
         Permission::create([
-            'name'          => 'creacion de role',
+            'name'          => 'Creacion de role',
             'slug'          => 'role.create',
             'description'   => 'crear un role en el sistema',
             ]);
 
         Permission::create([
-        'name'          => 'edicion de role',
+        'name'          => 'Edicion de role',
         'slug'          => 'role.edit',
         'description'   => 'editar cualquier dato de un role del sistema',
 
         ]);
         Permission::create([
-        'name'          => 'eliminar role',
+        'name'          => 'Eliminar role',
         'slug'          => 'role.destroy',
-        'description'   => 'eliminar cualquier role del sistema',
+        'description'   => 'Eliminar cualquier role del sistema',
 
         ]);
 
         //products
         Permission::create([
-        'name'          => 'Navegar products',
+        'name'          => 'Listar products',
         'slug'          => 'product.list',
         'description'   => 'Lista y navega todos los products del sistema',
         ]);
 
         Permission::create([
-        'name'          => 'ver detalle del product',
+        'name'          => 'Ver detalle del product',
         'slug'          => 'product.show',
         'description'   => 'ver en detalle cada product del sistema',
         ]);
 
         Permission::create([
-            'name'          => 'creacion de product',
+            'name'          => 'Creacion de product',
             'slug'          => 'product.create',
             'description'   => 'crear un product en el sistema',
             ]);
 
         Permission::create([
-        'name'          => 'edicion de product',
+        'name'          => 'Edicion de product',
         'slug'          => 'product.edit',
         'description'   => 'editar cualquier dato de un product del sistema',
 
         ]);
         Permission::create([
-        'name'          => 'eliminar product',
+        'name'          => 'Eliminar product',
         'slug'          => 'product.destroy',
-        'description'   => 'eliminar cualquier product del sistema',
+        'description'   => 'Eliminar cualquier product del sistema',
 
         ]);
 
         //categories
         Permission::create([
-        'name'          => 'Navegar categories',
+        'name'          => 'Listar categories',
         'slug'          => 'category.list',
         'description'   => 'Lista y navega todos los categories del sistema',
         ]);
 
         Permission::create([
-        'name'          => 'ver detalle del category',
+        'name'          => 'Ver detalle del category',
         'slug'          => 'category.show',
         'description'   => 'ver en detalle cada category del sistema',
         ]);
 
         Permission::create([
-            'name'          => 'creacion de category',
+            'name'          => 'Creacion de category',
             'slug'          => 'category.create',
             'description'   => 'crear una category en el sistema',
             ]);
 
         Permission::create([
-        'name'          => 'edicion de category',
+        'name'          => 'Edicion de category',
         'slug'          => 'category.edit',
         'description'   => 'editar cualquier dato de un category del sistema',
 
         ]);
         Permission::create([
-        'name'          => 'eliminar category',
+        'name'          => 'Eliminar category',
         'slug'          => 'category.destroy',
-        'description'   => 'eliminar cualquier category del sistema',
+        'description'   => 'Eliminar cualquier category del sistema',
 
         ]);
 
         //permission
         Permission::create([
-        'name'          => 'Navegar permissions',
+        'name'          => 'Listar permissions',
         'slug'          => 'permission.list',
         'description'   => 'Lista y navega todos los permissions del sistema',
         ]);
 
         Permission::create([
-        'name'          => 'ver detalle del permission',
+        'name'          => 'Ver detalle del permission',
         'slug'          => 'permission.show',
         'description'   => 'ver en detalle cada permission del sistema',
         ]);
