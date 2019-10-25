@@ -60,6 +60,7 @@ type Query {
     #Actividades
     activitiesWithParent(id_parent_activity: Int @where(operator: "!=")): [Activity!]! @all(model: "App\\Activity") #@middleware(checks:["auth:api"])
     activitiesParent(id_parent_activity: Int @where(operator: "=")): [Activity!]! @all(model: "App\\Activity") #@middleware(checks:["auth:api"])
+    activity(name: String @eq id_activity:ID @eq): Activity @find(model: "App\\Activity") #@middleware(checks:["auth:api"])
 
 }
 
