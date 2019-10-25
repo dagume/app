@@ -14,6 +14,8 @@ type Query {
     projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
 
     projectsWithParent(id_parent: Int @where(operator: "!=")): [Project!]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])
+    projectsParent(id_parent: Int @where(operator: "=")): [Project!]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])
+
     projects_paginatorWithParent(id_parent: Int @where(operator: "!=")): [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
 
     #Query Project_type
@@ -55,6 +57,10 @@ type Query {
     #GlobalSearch
     #globalSearch(name: String!): [GlobalSearch]
     #Search(Keyword:String!): [GlobalSearch]
+    #Actividades
+    activitiesWithParent(id_parent_activity: Int @where(operator: "!=")): [Activity!]! @all(model: "App\\Activity") #@middleware(checks:["auth:api"])
+    activitiesParent(id_parent_activity: Int @where(operator: "=")): [Activity!]! @all(model: "App\\Activity") #@middleware(checks:["auth:api"])
+
 }
 
 #interface GlobalSearch
@@ -77,18 +83,18 @@ type MessageSuccessProject {
     message: String
 }
 #Actividades
-type Activity {#implements GlobalSearch{
+type Activity { #implements GlobalSearch{
     id_activity:ID!
     project:Project
+    parent_activity:Activity
     name:String
     description:String
     date_start:Date
     date_end:Date
     state:String
-    process:Float
-    type:String
-    duration:Float
-    priority:Int
+    completed:Boolean
+    priority:String
+    notes: String
 }
 #Mensaje de creado de folder
 type MessageSuccessFolder {
@@ -323,6 +329,7 @@ type Mutation {
     #Crear Proyecto
     createProject(
         id_project_type: Int @rules(apply: ["integer","required"])
+        #Revisar siguiente linea
         id_parent: parentProject
         name: String @rules(apply: ["required", "max:255","unique:projects,name"])
         start_date: Date @rules(apply: ["nullable","date"])
@@ -454,29 +461,26 @@ type Mutation {
     #Crear actividad
     createActivity(
         id_project: Int @rules(apply: ["integer","required"])
+        id_parent_activity: Int @rules(apply: ["integer","nullable"])
         name: String @rules(apply: ["required", "max:255","unique:activities,name"])
         description: String @rules(apply: ["nullable"])
         date_start: Date @rules(apply: ["date"])
         date_end: Date @rules(apply: ["date"])
         state: String @rules(apply: ["required", "max:5"])
-        process:Float
-        type:String
-        duration:Float
-        priority:Int
+        completed:Boolean
+        priority:String
+        notes:String
     ): Activity @create(model: "App\\Activity") #@middleware(checks:["auth:api"])
 
-    #Editar Proyecto
-    updateProject(
-        id_activity: ID! @rules(apply: ["required"])
-        name: String @rules(apply: ["required", "max:255","unique:activities,name"])
-        description: String @rules(apply: ["nullable"])
-        date_start: Date @rules(apply: ["date"])
-        date_end: Date @rules(apply: ["date"])
-    ): Activity @update(model: "App\\Activity") #@middleware(checks:["auth:api"])
-
+    ##Editar Proyecto
+    #updateActivity(
+    #    id_activity: ID! @rules(apply: ["required"])
+    #    name: String @rules(apply: ["required", "max:255","unique:activities,name"])
+    #    description: String @rules(apply: ["nullable"])
+    #    date_start: Date @rules(apply: ["date"])
+    #    date_end: Date @rules(apply: ["date"])
+    #): Activity @update(model: "App\\Activity") #@middleware(checks:["auth:api"])
 }
-
-
 #input ContactInput{
 #    id_parent_contact: Int @rules(apply: ["integer"])
 #    id_job: Int @rules(apply: ["integer"])

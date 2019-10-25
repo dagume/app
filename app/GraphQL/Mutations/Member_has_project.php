@@ -30,6 +30,7 @@ class Member_has_project
             $member->state          = $args['state'];
             $member->save();
             $member->roles()->attach($args['id_rol']);
+            //Aqui se le crea la cuenta al rol 
         }, 3);
         return [
             'message' => 'Miembro agregado exitosamente'

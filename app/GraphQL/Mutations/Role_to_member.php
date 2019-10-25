@@ -23,6 +23,7 @@ class Role_to_member
         DB::transaction(function () use($args){
             $member = Member::findOrFail($args['id_members']);
             $member->roles()->attach($args['id_role']);
+            //Aqui se le crea la cuenta al rol 
         }, 3);
         return [
             'message' => 'se asigno role al miembro'
