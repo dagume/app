@@ -32,7 +32,7 @@ class CreateContact
             ]);
             $contact = new User;
             $contact->id_parent_contact     =$args['id_parent_contact'];
-            $contact->id_role               =$args['id_role'];
+            //$contact->id_role               =$args['id_role'];
             $contact->type                  =$args['type'];
             $contact->name                  =$args['name'];
             $contact->lastname              =$args['lastname'];
@@ -51,7 +51,7 @@ class CreateContact
             $contact->save();
             return [
                 'contact' => $contact,
-                'message' => 'Proyecto creado exitosamente'
+                'message' => 'Contacto creado exitosamente'
             ];
         //}, 3);
     }

@@ -10,7 +10,7 @@ type Query {
     #Query proyectos
     filterName_Project(name: String! @where(operator: "like")): [Project] @all(model: "App\\Project") #@middleware(checks:["auth:api"])
     project(name: String @eq id_project:ID @eq): Project @find(model: "App\\Project") #@middleware(checks:["auth:api"])
-    projects: [Project!]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])
+    projects: [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api", "can:Listar projects"])
     projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
 
     projectsWithParent(id_parent: Int @where(operator: "!=")): [Project!]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])
@@ -32,13 +32,13 @@ type Query {
    # users: [User!]! @all(model: "App\\User") @middleware(checks:["auth:api"])
    # users_paginator: [User]! @paginate(type: "paginator" model: "App\\User") @middleware(checks:["auth:api"])
     #Query roles
-    role(name: String! @eq): Role @find(model: "Caffeinated\\Shinobi\\Models\\Role") #@middleware(checks:["auth:api"])
-    roles: [Role!]! @all(model: "Caffeinated\\Shinobi\\Models\\Role") #@middleware(checks:["auth:api"])
-    roles_paginator: [Role]! @paginate(type: "paginator" model: "Caffeinated\\Shinobi\\Models\\Role") #@middleware(checks:["auth:api"])
+    #role(name: String! @eq): Role @find(model: "Caffeinated\\Shinobi\\Models\\Role") #@middleware(checks:["auth:api"])
+    #roles: [Role!]! @all(model: "Caffeinated\\Shinobi\\Models\\Role") #@middleware(checks:["auth:api"])
+    #roles_paginator: [Role]! @paginate(type: "paginator" model: "Caffeinated\\Shinobi\\Models\\Role") #@middleware(checks:["auth:api"])
     #Query permissions
-    permission(name: String! @eq): Permission @find(model: "Caffeinated\\Shinobi\\Models\\Permission") #@middleware(checks:["auth:api"])
-    permissions: [Permission!]! @all(model: "Caffeinated\\Shinobi\\Models\\Permission") #@middleware(checks:["auth:api"])
-    permissions_paginator: [Permission]! @paginate(type: "paginator" model: "Caffeinated\\Shinobi\\Models\\Permission") #@middleware(checks:["auth:api"])
+    #permission(name: String! @eq): Permission @find(model: "Caffeinated\\Shinobi\\Models\\Permission") #@middleware(checks:["auth:api"])
+    #permissions: [Permission!]! @all(model: "Caffeinated\\Shinobi\\Models\\Permission") #@middleware(checks:["auth:api"])
+    #permissions_paginator: [Permission]! @paginate(type: "paginator" model: "Caffeinated\\Shinobi\\Models\\Permission") #@middleware(checks:["auth:api"])
     #Members
     members: [Member] @paginate(type: "paginator" model: "App\\Member") #@middleware(checks:["auth:api"])
     #Categories
@@ -187,7 +187,7 @@ type Contact {#implements GlobalSearch{
     web_site:String
     password: String
     remember_token:String
-    role: Role
+    role: [Role]
     contacts: [Contact]
     members:[Member]
 }
@@ -362,7 +362,7 @@ type Mutation {
     ######################Contacts
     createContact(
         id_parent_contact: Int @rules(apply: ["nullable","integer"])
-        id_role: Int! @rules(apply: ["integer"])
+        #id_role: Int @rules(apply: ["integer"])
         type: contactType @rules(apply: ["required", "integer"])
         name: String @rules(apply: ["required", "max:255"])
         lastname: String @rules(apply: ["max:255"])

@@ -5,6 +5,7 @@ namespace App;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+//use Caffeinated\Shinobi\Concerns\HasRolesAndPermissions;
 use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
@@ -40,7 +41,7 @@ class User extends Authenticatable
     //Falta Relacion con cuentas
     public function role()
     {
-        return $this->belongsTo('Caffeinated\Shinobi\Models\Role', 'id_role');
+        return $this->belongsTo('Caffeinated\Shinobi\Models\Role', 'id_role','id_role');
     }
     public function members()
     {

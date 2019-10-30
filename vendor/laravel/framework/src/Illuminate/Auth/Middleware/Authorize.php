@@ -40,7 +40,9 @@ class Authorize
      */
     public function handle($request, Closure $next, $ability, ...$models)
     {
+
         $this->gate->authorize($ability, $this->getGateArguments($request, $models));
+
 
         return $next($request);
     }
@@ -54,6 +56,7 @@ class Authorize
      */
     protected function getGateArguments($request, $models)
     {
+
         if (is_null($models)) {
             return [];
         }
@@ -72,6 +75,7 @@ class Authorize
      */
     protected function getModel($request, $model)
     {
+
         if ($this->isClassName($model)) {
             return trim($model);
         } else {

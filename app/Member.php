@@ -2,11 +2,16 @@
 
 namespace App;
 
-use Caffeinated\Shinobi\Models\Role;
+//use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Database\Eloquent\Model;
+//use Caffeinated\Shinobi\Concerns\HasRolesAndPermissions;
+use Spatie\Permission\Traits\HasRoles;
 
 class Member extends Model
 {
+    use HasRoles;
+    //use HasRolesAndPermissions;
+    protected $guard_name = 'web';
     protected  $table= 'members';
 
     protected $primaryKey = 'id_members';
@@ -30,9 +35,9 @@ class Member extends Model
     {
         return $this->belongsTo('App\User', 'id_contact', 'id_contact');
     }
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class, 'role_user', 'id_members', 'id_role')->withTimestamps();
-    }
+    //public function roles()
+    //{
+    //    return $this->belongsToMany(Role::class, 'role_user', 'id_members', 'id_role')->withTimestamps();
+    //}
 
 }
