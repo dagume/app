@@ -7,6 +7,7 @@ use App\role_user;
 use GraphQL\Type\Definition\ResolveInfo;
 use DB;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
+use Spatie\Permission\Models\Role;
 
 class Member_has_project
 {
@@ -29,8 +30,9 @@ class Member_has_project
             $member->hours_month    = $args['hours_month'];
             $member->state          = $args['state'];
             $member->save();
+            $role = Role::findOrFail(3);
             //$member->roles()->attach($args['id_rol']);
-            $member->assignRole($args['id_rol']);
+            $member->assignRole($role);
             //Aqui se le crea la cuenta al rol
         }, 3);
         return [

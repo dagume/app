@@ -10,7 +10,7 @@ type Query {
     #Query proyectos
     filterName_Project(name: String! @where(operator: "like")): [Project] @all(model: "App\\Project") #@middleware(checks:["auth:api"])
     project(name: String @eq id_project:ID @eq): Project @find(model: "App\\Project") #@middleware(checks:["auth:api"])
-    projects: [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api", "can:Listar projects"])
+    projects: [Project!]! @all(model: "App\\Project") @middleware(checks:["auth:api", "can:Listar projectsApi"])
     projects_paginator: [Project]! @paginate(type: "paginator" model: "App\\Project") #@middleware(checks:["auth:api"])
 
     projectsWithParent(id_parent: Int @where(operator: "!=")): [Project!]! @all(model: "App\\Project") #@middleware(checks:["auth:api"])

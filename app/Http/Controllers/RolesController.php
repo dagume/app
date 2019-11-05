@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Member;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use App\User;
@@ -146,8 +148,18 @@ class RolesController extends Controller
         //$permission25->assignRole($role5);
         //$permission26->assignRole($role3);
         //$permission27->assignRole($role3);
-        $user = User::findOrFail(6);
-        $user->assignRole(1);
+
+        $role1 = Role::create(['guard_name' => 'api', 'name' => 'clienteApi']);
+        $permission1 = Permission::create(['guard_name' => 'api', 'name' => 'Listar projectsApi']);
+        $permission1->assignRole($role1);
+        //$user1 = User::findOrFail(6);
+        //$user1->assignRole($role1);
+
+        //$role2 = Role::create(['guard_name' => 'api', 'name' => 'clienteApi']);
+        //$permission2 = Permission::create(['guard_name' => 'api', 'name' => 'projectsApi']);
+        //$permission2->assignRole($role2);
+        //$user2 = User::findOrFail(6);
+        //$user2->assignRole($role2);
         echo("Listo");
 
     }

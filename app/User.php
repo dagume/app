@@ -11,6 +11,8 @@ class User extends Authenticatable
 {
     use HasApiTokens, Notifiable, HasRoles;
 
+    protected $guard = 'web';
+
     protected  $table= 'contacts';
 
     protected $primaryKey = 'id_contact';

@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 //use Caffeinated\Shinobi\Concerns\HasRolesAndPermissions;
 use Spatie\Permission\Traits\HasRoles;
 
+
 class Member extends Model
 {
     use HasRoles;
     //use HasRolesAndPermissions;
-    protected $guard_name = 'web';
+    protected $guard_name = 'api';
+    
     protected  $table= 'members';
 
     protected $primaryKey = 'id_members';
