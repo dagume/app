@@ -72,22 +72,12 @@ type Query {
 #union GlobalSearch @union(resolveType: "App\\GraphQL\\Unions\\General@resolveType")
 #    = Contact | Project
 
-#Mensaje de creacion de contacto
-type MessageSuccessContact {
-    contact: Contact
-    message: String
-}
-#Mensaje de creacion de proyecto
-type MessageSuccessProject {
-    project: Project
-    message: String
-}
 #Actividades
 type Activity { #implements GlobalSearch{
-    id_activity:ID!
-    project:Project
+    id:ID!
+    project:Project!
     activities:[Activity]
-    name:String
+    name:String!
     description:String
     date_start:Date
     date_end:Date
@@ -95,23 +85,19 @@ type Activity { #implements GlobalSearch{
     completed:Boolean
     priority:String
     notes: String
+    amount:Int
+    is_added:Boolean
 }
-#Mensaje de creado de folder
-type MessageSuccessFolder {
-    folder: String
-}
-#Cotizacion
-type Quotation{
-    id_quotation:ID!
-    order:Order!
-    contact:Contact!
-    link:String
-    authorization:Boolean
-    date: Date
+#Categorias
+type Category {#implements GlobalSearch{
+    id:ID!
+    name:String!
+    description:String
+    Products:[Product]
 }
 #Detales
 type Detail{
-    id_detalle: ID!
+    id: ID!
     product:Product!
     order:Order!
     quantity:Int!
@@ -120,19 +106,23 @@ type Detail{
     delivery_amount:Int
     subtotal:Int
 }
-#Mensaje de creado Solicitud
-type MessageMember {
-    message: String
-}
-#Mensaje de creado Solicitud
-type MessageSuccess {
-    status: String!
-    message: String
+#Miembros
+type Member{
+    id:ID!
+    project:Project!
+    contact:Contact!
+    role:Role
+    hours_week:Int
+    hours_month:Int
+    state:Int!
 }
 #Ordenes
 type Order{
-    id_order:ID!
+    id:ID!
+    quotations:[Quotation]
+    project:Project
     contact:Contact
+    details:[Detail]
     name:String!
     code:String
     application_date: Date!
@@ -142,77 +132,30 @@ type Order{
     sender_data__:Contact
     subtotal:Int
     total:Int
-    details:[Detail]
-    quotations:[Quotation]
+}
+#Permisos
+type Permission {
+    id: ID!
+    name: String!
+    slug: String!
+    description: String
 }
 #Productos
 type Product {#implements GlobalSearch{
-    id_product:ID!
-    category:Category!
+    id:ID!
+    category:Category
     name:String!
     description:String
 }
-#Categorias
-type Category {#implements GlobalSearch{
-    id_category:ID!
-    name:String!
-    description:String
-    Products:[Product!]!
-}
-#Miembros
-type Member{
-    id_members:ID!
-    project:Project!
-    contact:Contact!
-    roles:[Role]
-    hours_week:Int
-    hours_month:Int
-    state:Int!
-}
-#Contact
-type Contact {#implements GlobalSearch{
-    id_contact:ID!
-    id_parent_contact:Int
-    type:contactType!
-    name:String!
-    lastname:String
-    identification_type:contactIdType!
-    identification_number:Int!
-    email:String!
-    phones:String!
-    state:Int!
-    locate:String
-    city:String
-    address:String
-    web_site:String
-    password: String
-    remember_token:String
-    role: Role
-    contacts: [Contact]
-    members:[Member]
-}
-#tipos de contacto
-enum contactType{
-    persona @enum(value: 1)
-    empresa @enum(value: 2)
-}
-#Tipo de identificacion Contacto
-enum contactIdType{
-    CC @enum(value: 1)
-    nit @enum(value: 2)
-    pasaporte @enum(value: 3)
-    extranjera @enum(value: 4)
-}
-
 #tipos de proyecto
 type Project_type {
-    id_project_type:ID!
+    id:ID!
     name_project_type:String
     description_project_type:String
 }
 #Proyecto
 type Project {#implements GlobalSearch{
-    id_project: ID!
+    id: ID!
     project_type:Project_type
     parent_project:Project
     name: String!
@@ -231,6 +174,70 @@ type Project {#implements GlobalSearch{
     id_folder: String
     members: [Member]
     activities:[Activity]
+}
+#Cotizacion
+type Quotation{
+    id:ID!
+    order:Order!
+    contact:Contact!
+    folder_id:String
+    authorization:Boolean
+    date: Date
+}
+#Contact
+type Contact {#implements GlobalSearch{
+    id:ID!
+    contacts: [Contact]
+    type:contactType!
+    name:String!
+    lastname:String
+    identification_type:contactIdType!
+    identification_number:Int!
+    email:String!
+    phones:String!
+    state:Int!
+    locate:String
+    city:String
+    address:String
+    web_site:String
+    password: String
+    remember_token:String
+    members:[Member]
+}
+#Mensaje de creacion de contacto
+type MessageSuccessContact {
+    contact: Contact
+    message: String
+}
+#Mensaje de creacion de proyecto
+type MessageSuccessProject {
+    project: Project
+    message: String
+}
+#Mensaje de creado de folder
+type MessageSuccessFolder {
+    folder: String
+}
+#Mensaje de creado Solicitud
+type MessageMember {
+    message: String
+}
+#Mensaje de creado Solicitud
+type MessageSuccess {
+    status: String!
+    message: String
+}
+#tipos de contacto
+enum contactType{
+    persona @enum(value: 1)
+    empresa @enum(value: 2)
+}
+#Tipo de identificacion Contacto
+enum contactIdType{
+    CC @enum(value: 1)
+    nit @enum(value: 2)
+    pasaporte @enum(value: 3)
+    extranjera @enum(value: 4)
 }
 #Tipos proyecto
 enum typeProject {
@@ -265,14 +272,6 @@ type Role {
   special: String
   permissions: [Permission]
 }
-
-type Permission {
-    id: ID!
-    name: String!
-    slug: String!
-    description: String
-}
-
 input LoginInput {
     username: String!
     password: String!

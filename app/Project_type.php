@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Project_type extends Model
 {
     protected  $table= 'project_type';
-    
-    protected $primaryKey = 'id_project_type';
+
+    protected $primaryKey = 'id';
 
     public $timestamps = false;
 
@@ -19,6 +19,6 @@ class Project_type extends Model
 
     public function projects()
     {
-        return $this->hasMany('App\Project', 'id_project_type', 'id_project_type');
+        return $this->hasMany('App\Project');
     }
 }

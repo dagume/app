@@ -5,20 +5,19 @@ namespace App;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Spatie\Permission\Traits\HasRoles;
+//use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     use HasApiTokens, Notifiable, HasRoles;
 
     protected  $table= 'contacts';
 
-    protected $primaryKey = 'id_contact';
+    protected $primaryKey = 'id';
 
     public $timestamps = true;
 
     protected $fillable = [
-        'id_parent_contact',
-        'id_role',
+        'parent_contact_id',
         'type',
         'name',
         'lastname',
@@ -27,8 +26,8 @@ class User extends Authenticatable
         'email',
         'phones',
         'state',
-        'city',
         'locate',
+        'city',
         'address',
         'web_site',
         'password',
@@ -38,21 +37,17 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
     //Falta Relacion con cuentas
-    public function role()
-    {
-        return $this->belongsTo('Caffeinated\Shinobi\Models\Role', 'id_role');
-    }
-    public function members()
-    {
-        return $this->hasMany('App\Member', 'id_contact', 'id_contact');
-    }
     public function contact()
     {
         return $this->BelongsTo(User::class);
     }
+    public function members()
+    {
+        return $this->hasMany('App\Member');
+    }
     public function orders()
     {
-        return $this->hasMany('App\Order', 'id_contact', 'id_contact');
+        return $this->hasMany('App\Order');
     }
     public function quotations()
     {

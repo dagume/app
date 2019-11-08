@@ -8,25 +8,24 @@ class Quotation extends Model
 {
     protected  $table= 'quotations';
 
-    protected $primaryKey = 'id_quotation';
+    protected $primaryKey = 'id';
 
     public $timestamps = false;
 
     protected $fillable = [
-        'id_order',
-        'id_contact',
-        'link',
+        'order_id',
+        'contact_id',
+        'folder_id',
         'authorization',
         'date'
     ];
 
     public function order()
     {
-        return $this->belongsTo('App\Order', 'id_order', 'id_order');
+        return $this->belongsTo('App\Order');
     }
     public function contact()
     {
-        return $this->belongsTo('App\User', 'id_contact', 'id_contact');
+        return $this->belongsTo('App\User');
     }
-
 }

@@ -8,34 +8,40 @@ class Order extends Model
 {
     protected  $table= 'orders';
 
-    protected $primaryKey = 'id_order';
+    protected $primaryKey = 'id';
 
     public $timestamps = false;
 
     protected $fillable = [
-        'id_contact',
+        'quotation_id',
+        'project_id',
+        'contact_id',
         'name',
         'code',
         'application_date',
         'state',
         'description',
-        '__delivery_site',
-        'sender_data__',
+        'delivery_site',
+        'sender_data',
         'subtotal',
         'total'
     ];
-
+    public function quotations()
+    {
+        return $this->hasMany('App\Quotation');
+    }
+    public function project()
+    {
+        return $this->belongsTo('App\Project');
+    }
     public function contact()
     {
-        return $this->belongsTo('App\User', 'id_contact', 'id_contact');
+        return $this->belongsTo('App\User');
     }
     public function details()
     {
-        return $this->hasMany('App\Detail', 'id_order', 'id_order');
+        return $this->hasMany('App\Detail');
     }
-    public function quotations()
-    {
-        return $this->hasMany('App\Quotation', 'id_order', 'id_order');
-    }
+
 
 }

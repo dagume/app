@@ -8,19 +8,19 @@ class Product extends Model
 {
     protected  $table= 'products';
 
-    protected $primaryKey = 'id_product';
+    protected $primaryKey = 'id';
 
     public $timestamps = false;
 
     protected $fillable = [
-        'id_category',
+        'category_id',
         'name',
         'description'
     ];
 
     public function category()
     {
-        return $this->belongsTo('App\Category', 'id_category', 'id_category');
+        return $this->belongsTo('App\Category');
     }
 
 }

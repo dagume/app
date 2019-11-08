@@ -8,13 +8,13 @@ class Project extends Model
 {
     protected  $table= 'projects';
 
-    protected $primaryKey = 'id_project';
+    protected $primaryKey = 'id';
 
     public $timestamps = false;
 
     protected $fillable = [
-        'id_project_type',
-        'id_parent',
+        'project_type_id',
+        'parent_project_id',
         'name',
         'start_date',
         'end_date',
@@ -28,22 +28,22 @@ class Project extends Model
         'type',
         'association',
         'consortium_name',
-        'id_folder',
+        'folder_id',
     ];
     public function project_type()
     {
-        return $this->belongsTo('App\Project_type', 'id_project_type', 'id_project_type');
-    }
-    public function members()
-    {
-        return $this->hasMany('App\Member', 'id_project');
+        return $this->belongsTo('App\Project_type');
     }
     public function parent_project()
     {
-        return $this->belongsTo('App\Project', 'id_parent', 'id_project');
+        return $this->belongsTo('App\Project');
+    }
+    public function members()
+    {
+        return $this->hasMany('App\Member');
     }
     public function activities()
     {
-        return $this->hasMany('App\Activity', 'id_project');
+        return $this->hasMany('App\Activity');
     }
 }

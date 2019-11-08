@@ -9,13 +9,14 @@ class Member extends Model
 {
     protected  $table= 'members';
 
-    protected $primaryKey = 'id_members';
+    protected $primaryKey = 'id';
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
-        'id_project',
-        'id_contact',
+        'project_id',
+        'contact_id',
+        'role_id',
         'hours_week',
         'hours_month',
         'state'
@@ -30,9 +31,9 @@ class Member extends Model
     {
         return $this->belongsTo('App\User', 'id_contact', 'id_contact');
     }
-    public function roles()
+    public function role()
     {
-        return $this->belongsToMany(Role::class, 'role_user', 'id_members', 'id_role')->withTimestamps();
+        return $this->belongsTo(Role::class)->withTimestamps();
     }
 
 }

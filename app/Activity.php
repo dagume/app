@@ -8,13 +8,13 @@ class Activity extends Model
 {
     protected  $table= 'activities';
 
-    protected $primaryKey = 'id_activity';
+    protected $primaryKey = 'id';
 
     public $timestamps = false;
 
     protected $fillable = [
-        'id_project',
-        'id_parent_activity',
+        'project_id',
+        'parent_activity_id',
         'name',
         'description',
         'date_start',
@@ -22,16 +22,18 @@ class Activity extends Model
         'state',
         'completed',
         'priority',
-        'notes'
+        'notes',
+        'amount',
+        'is_added'
     ];
 
     public function project()
     {
-        return $this->belongsTo('App\Project', 'id_project', 'id_project');
+        return $this->belongsTo('App\Project');
     }
     public function activities()
     {
-        return $this->hasMany('App\Activity', 'id_parent_activity', 'id_activity');
+        return $this->hasMany('App\Activity');
     }
 
 

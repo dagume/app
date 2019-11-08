@@ -8,25 +8,26 @@ class Detail extends Model
 {
     protected  $table= 'details';
 
-    protected $primaryKey = 'id_detail';
+    protected $primaryKey = 'id';
 
     public $timestamps = false;
 
     protected $fillable = [
-        'id_product',
-        'id_order',
+        'product_id',
+        'order_id',
         'quantity',
         'value',
-        'cost',
-        'measure'
+        'measure',
+        'delivered_amount',
+        'subtotal'
     ];
 
     public function product()
     {
-        return $this->belongsTo('App\Product', 'id_product', 'id_product');
+        return $this->belongsTo('App\Product');
     }
     public function order()
     {
-        return $this->belongsTo('App\Order', 'id_order', 'id_order');
+        return $this->belongsTo('App\Order');
     }
 }

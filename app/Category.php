@@ -8,7 +8,7 @@ class Category extends Model
 {
     protected  $table= 'category';
 
-    protected $primaryKey = 'id_category';
+    protected $primaryKey = 'id';
 
     public $timestamps = false;
 
@@ -18,6 +18,6 @@ class Category extends Model
     ];
 
     public function products(){
-        return $this->hasMany('App\Product','id_category');
+        return $this->hasMany('App\Product');
     }
 }
