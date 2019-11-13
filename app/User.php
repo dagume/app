@@ -5,10 +5,10 @@ namespace App;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-//use Spatie\Permission\Traits\HasRoles;
+
 class User extends Authenticatable
 {
-    use HasApiTokens, Notifiable, HasRoles;
+    use HasApiTokens, Notifiable;
 
     protected  $table= 'contacts';
 
@@ -31,7 +31,7 @@ class User extends Authenticatable
         'address',
         'web_site',
         'password',
-        'id_folder',
+        'folder_id',
     ];
     protected $hidden = [
         'password', 'remember_token',
@@ -39,7 +39,7 @@ class User extends Authenticatable
     //Falta Relacion con cuentas
     public function contact()
     {
-        return $this->BelongsTo(User::class);
+        return $this->BelongsTo(User::class, 'parent_contact_id');
     }
     public function members()
     {

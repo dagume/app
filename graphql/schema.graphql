@@ -95,6 +95,27 @@ type Category {#implements GlobalSearch{
     description:String
     Products:[Product]
 }
+#Contact
+type Contact {#implements GlobalSearch{
+    id:ID!
+    contact:Contact
+    type:contactType!
+    name:String!
+    lastname:String
+    identification_type:contactIdType!
+    identification_number:Int!
+    email:String!
+    phones:String!
+    state:Int!
+    locate:String
+    city:String
+    address:String
+    web_site:String
+    password: String
+    remember_token:String
+    folder_id:String
+    members:[Member]
+}
 #Detales
 type Detail{
     id: ID!
@@ -184,29 +205,17 @@ type Quotation{
     authorization:Boolean
     date: Date
 }
-#Contact
-type Contact {#implements GlobalSearch{
-    id:ID!
-    contacts: [Contact]
-    type:contactType!
-    name:String!
-    lastname:String
-    identification_type:contactIdType!
-    identification_number:Int!
-    email:String!
-    phones:String!
-    state:Int!
-    locate:String
-    city:String
-    address:String
-    web_site:String
-    password: String
-    remember_token:String
-    members:[Member]
+#Role
+type Role {
+  id: ID!
+  name: String!
+  slug: String!
+  description: String
+  special: String
+  permissions: [Permission]
 }
 #Mensaje de creacion de contacto
-type MessageSuccessContact {
-    contact: Contact
+type MessageSuccess {
     message: String
 }
 #Mensaje de creacion de proyecto
@@ -220,11 +229,6 @@ type MessageSuccessFolder {
 }
 #Mensaje de creado Solicitud
 type MessageMember {
-    message: String
-}
-#Mensaje de creado Solicitud
-type MessageSuccess {
-    status: String!
     message: String
 }
 #tipos de contacto
@@ -263,24 +267,13 @@ enum parentProject {
     estudio_suelos @enum(value: 4)
     diseno @enum(value: 5)
 }
-
-type Role {
-  id: ID!
-  name: String!
-  slug: String!
-  description: String
-  special: String
-  permissions: [Permission]
-}
 input LoginInput {
     username: String!
     password: String!
 }
-
 input RefreshTokenInput {
     refresh_token: String
 }
-
 type AuthPayload {
     access_token: String!
     refresh_token: String!
@@ -288,36 +281,29 @@ type AuthPayload {
     token_type: String!
     contact: Contact!
 }
-
 type RefreshTokenPayload {
     access_token: String!
     refresh_token: String!
     expires_in: Int!
     token_type: String!
 }
-
 type LogoutResponse {
     status: String!
     message: String
 }
-
 type ForgotPasswordResponse {
     status: String!
     message: String
 }
-
 input ForgotPasswordInput {
     email: String!
 }
-
 input NewPasswordWithCodeInput {
     email: String!
     token: String!
     password: String!
     password_confirmation: String!
 }
-
-
 type Mutation {
     #Auth
     login(data: LoginInput): AuthPayload! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\Login@resolve")
@@ -328,9 +314,9 @@ type Mutation {
     ########################projects
     #Crear Proyecto
     createProject(
-        id_project_type: Int @rules(apply: ["integer","required"])
+        project_type_id: Int @rules(apply: ["integer","required"])
         #Revisar siguiente linea
-        id_parent: parentProject
+        parent_project_id: parentProject
         name: String @rules(apply: ["required", "max:255","unique:projects,name"])
         start_date: Date @rules(apply: ["nullable","date"])
         end_date: Date @rules(apply: ["nullable","date"])
@@ -342,7 +328,7 @@ type Mutation {
         type: typeProject
         association: associationProject
         consortium_name:String
-        id_folder: String
+        folder_id: String
     ): MessageSuccessProject @field(resolver: "App\\GraphQL\\Mutations\\CreateProject@resolve") #@middleware(checks:["auth:api"])
     #Editar Proyecto
     updateProject(
@@ -360,8 +346,7 @@ type Mutation {
     ): Project @update(model: "App\\Project") #@middleware(checks:["auth:api"])
     ######################Contacts
     createContact(
-        id_parent_contact: Int @rules(apply: ["nullable","integer"])
-        id_role: Int! @rules(apply: ["integer"])
+        parent_contact_id: Int @rules(apply: ["nullable"])
         type: contactType @rules(apply: ["required", "integer"])
         name: String @rules(apply: ["required", "max:255"])
         lastname: String @rules(apply: ["max:255"])
@@ -375,7 +360,7 @@ type Mutation {
         address:String @rules(apply: ["max:255"])
         web_site:String @rules(apply: ["max:255"])
         password: String @bcrypt @rules(apply: ["min:8"])
-    ):  MessageSuccessContact @field(resolver: "App\\GraphQL\\Mutations\\CreateContact@resolve") #@middleware(checks:["auth:api"])
+    ):  MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateContact@resolve") #@middleware(checks:["auth:api"])
 
     updateContact(
         id_contact: ID! @rules(apply: ["required"])

@@ -5,6 +5,7 @@ namespace App\GraphQL\Mutations;
 use App\User;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
+use DB;
 
 class CreateContact
 {
@@ -24,15 +25,14 @@ class CreateContact
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        //DB::transaction(function () use($args){
+        DB::transaction(function () use($args){
             $fileMetadata = new \Google_Service_Drive_DriveFile([
                 'name'     => $args['name'],
                 'mimeType' => 'application/vnd.google-apps.folder',
                 'parents' => [$this->folder_id ],
             ]);
             $contact = new User;
-            $contact->id_parent_contact     =$args['id_parent_contact'];
-            $contact->id_role               =$args['id_role'];
+            $contact->parent_contact_id     =$args['parent_contact_id'];
             $contact->type                  =$args['type'];
             $contact->name                  =$args['name'];
             $contact->lastname              =$args['lastname'];
@@ -47,12 +47,11 @@ class CreateContact
             $contact->web_site              =$args['web_site'];
             $contact->password              =$args['password'];
             $folder = Conection_Drive()->files->create($fileMetadata, ['fields' => 'id']);
-            $contact->id_folder             =$folder->id;
+            $contact->folder_id             =$folder->id;
             $contact->save();
-            return [
-                'contact' => $contact,
-                'message' => 'Proyecto creado exitosamente'
-            ];
-        //}, 3);
+        }, 3);
+        return [
+            'message' => 'Contacto creado exitosamente'
+        ];
     }
 }

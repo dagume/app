@@ -38,13 +38,13 @@ class Role extends Model implements RoleContract
      *
      * @return Model
      */
-    public function users(): HasMany
+    //public function users(): HasMany
+    //{
+    //    return $this->hasMany('App\User', 'id_role');
+    //}
+    public function members(): HasMany
     {
-        return $this->hasMany('App\User', 'id_role');
-    }
-    public function members(): BelongsToMany
-    {
-        return $this->belongsToMany(Member::class, 'role_user', 'id_members', 'id_role')->withTimestamps();
+        return $this->hasMany(Member::class)->withTimestamps();
 
     }
     //public function members(): BelongsToMany
