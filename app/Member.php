@@ -8,7 +8,7 @@ use Caffeinated\Shinobi\Concerns\HasRolesAndPermissions;
 class Member extends Model
 {
     use HasRolesAndPermissions;
-    
+
     protected  $table= 'members';
 
     protected $primaryKey = 'id';
