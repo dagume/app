@@ -13,7 +13,7 @@ interface Role
      * @return Model
      */
     //public function users(): HasMany;
-    public function members(): HasMany;
+    public function members(): hasMany;
 
     public function hasPermissionFlags(): bool;
     public function hasPermissionThroughFlag(): bool;

@@ -46,7 +46,7 @@ class CreateApplication
             }
         }, 3);
 
-        //$formulario->Visita_idVisita = (int) Visita::max('idVisita');
+        
         return [
             'message' => 'Solicitud Enviada correctamente'
         ];

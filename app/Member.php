@@ -3,12 +3,9 @@
 namespace App;
 use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Database\Eloquent\Model;
-use Caffeinated\Shinobi\Concerns\HasRolesAndPermissions;
 
 class Member extends Model
 {
-    use HasRolesAndPermissions;
-    
     protected  $table= 'members';
 
     protected $primaryKey = 'id';
@@ -31,7 +28,7 @@ class Member extends Model
     }
     public function contact()
     {
-        return $this->belongsTo('App\User', 'id_contact', 'id_contact');
+        return $this->belongsTo('App\User', 'contact_id', 'contact_id');
     }
     public function role()
     {

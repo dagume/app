@@ -3,12 +3,13 @@
 namespace App;
 
 use Laravel\Passport\HasApiTokens;
+use Caffeinated\Shinobi\Concerns\HasRolesAndPermissions;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, Notifiable;
+    use HasApiTokens, Notifiable, HasRolesAndPermissions;
 
     protected  $table= 'contacts';
 
@@ -43,14 +44,18 @@ class User extends Authenticatable
     }
     public function members()
     {
-        return $this->hasMany('App\Member');
+        return $this->belongsToMany(Member::class, 'members', 'contact_id', 'role_id')->withTimestamps();
     }
+    //public function members()
+    //{
+    //    return $this->hasMany('App\Member', 'contact_id', 'id');
+    //}
     public function orders()
     {
-        return $this->hasMany('App\Order');
+        return $this->hasMany('App\Order', 'contact_id', 'id');
     }
     public function quotations()
     {
-        return $this->hasMany('App\Quotation', 'id_contact', 'id_contact');
+        return $this->hasMany('App\Quotation', 'contact_id', 'id');
     }
 }

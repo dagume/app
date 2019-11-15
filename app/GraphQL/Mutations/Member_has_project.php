@@ -3,7 +3,6 @@
 namespace App\GraphQL\Mutations;
 
 use App\Member;
-use App\role_user;
 use GraphQL\Type\Definition\ResolveInfo;
 use DB;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
@@ -23,14 +22,14 @@ class Member_has_project
     {
         DB::transaction(function () use($args){
             $member = new Member;
-            $member->id_project     = $args['id_project'];
-            $member->id_contact     = $args['id_contact'];
+            $member->project_id     = $args['project_id'];
+            $member->contact_id     = $args['contact_id'];
+            $member->rol_id         = $args['rol_id'];
             $member->hours_week     = $args['hours_week'];
             $member->hours_month    = $args['hours_month'];
             $member->state          = $args['state'];
             $member->save();
-            $member->roles()->attach($args['id_rol']);
-            //Aqui se le crea la cuenta al rol 
+            //Aqui se le crea la cuenta al rol
         }, 3);
         return [
             'message' => 'Miembro agregado exitosamente'

@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 use App\User;
+use Caffeinated\Shinobi\Models\Permission;
+use Caffeinated\Shinobi\Models\Role;
 use DB;
 
 use Illuminate\Http\Request;
@@ -15,14 +15,46 @@ class RolesController extends Controller
     {}
     public function index()
     {
-        $role1 = Role::create(['name' => 'Banco']);
-        $role2 = Role::create(['name' => 'Prestamista']);
-        $role3 = Role::create(['name' => 'Proveedor']);
+        //dd(Role::findOrfail(1));
+        //$role1 = Role::findOrfail(1);
+        //$role2 = Role::findOrfail(2);
+        //$role3 = Role::findOrfail(3);
+        //$role4 = Role::findOrfail(4);
+        //$role5 = Role::findOrfail(5);
+        //$role2 = Role::create(['name' => 'Prestamista']);
+        //$role3 = Role::create(['name' => 'Proveedor']);
         //$role1 = Role::create(['name' => 'Super Admin']);
         //$role2 = Role::create(['name' => 'Equipo de trabajo']);
         //$role3 = Role::create(['name' => 'Cliente']);
         //$role4 = Role::create(['name' => 'Socio']);
 //
+        //$permission1 = Permission::findOrfail(1);
+        //$permission2 = Permission::findOrfail(2);
+        //$permission3 = Permission::findOrfail(3);
+        //$permission4 = Permission::findOrfail(4);
+        //$permission5 = Permission::findOrfail(5);
+        //$permission6 = Permission::findOrfail(6);
+        //$permission7 = Permission::findOrfail(7);
+        //$permission8 = Permission::findOrfail(8);
+        //$permission9 = Permission::findOrfail(9);
+        //$permission10= Permission::findOrfail(10);
+        //$permission11= Permission::findOrfail(11);
+        //$permission12= Permission::findOrfail(12);
+        //$permission13= Permission::findOrfail(13);
+        //$permission14= Permission::findOrfail(14);
+        ////$permission15= Permission::findOrfail(15);
+        //$permission16= Permission::findOrfail(16);
+        //$permission17= Permission::findOrfail(17);
+        //$permission18= Permission::findOrfail(18);
+        //$permission19= Permission::findOrfail(19);
+        //$permission20= Permission::findOrfail(20);
+        //$permission21= Permission::findOrfail(21);
+        //$permission22= Permission::findOrfail(22);
+        //$permission23= Permission::findOrfail(23);
+        //$permission24= Permission::findOrfail(24);
+        //$permission25= Permission::findOrfail(25);
+        //$permission26= Permission::findOrfail(26);
+        //$permission27= Permission::findOrfail(27);
         //$permission1 = Permission::create(['name' => 'Listar proyectos']);
         //$permission2 = Permission::create(['name' => 'Buscar proyecto']);
         //$permission3 = Permission::create(['name' => 'Crear proyectos']);
@@ -52,24 +84,78 @@ class RolesController extends Controller
         //$permission27= Permission::create(['name' => 'Editar orden']);
         //$permission28= Permission::create(['name' => 'Crear detalle']);
 //
-        //$permission1->assignRole($role2);
-        //$permission1->assignRole($role3);
-        //$permission1->assignRole($role4);
+        //$role2->givePermissionTo($permission1);
+        //$role3->givePermissionTo($permission1);
+        //$role5->givePermissionTo($permission1);
 //
-        //$permission2->assignRole($role2);
-        //$permission2->assignRole($role3);
-        //$permission2->assignRole($role4);
-        //$permission6->assignRole($role2);
-        //$permission7->assignRole($role2);
+        //$role2->givePermissionTo($permission2);
+        //$role3->givePermissionTo($permission2);
+        //$role5->givePermissionTo($permission2);
 //
-        //$permission12->assignRole($role2);
-        //$permission13->assignRole($role2);
-        //$permission14->assignRole($role2);
-        //$permission15->assignRole($role2);
-        //$permission16->assignRole($role2);
-        //$permission17->assignRole($role2);
-        //$permission18->assignRole($role2);
-        //$permission19->assignRole($role2);
+        //$role3->givePermissionTo($permission3);
+        //$role3->givePermissionTo($permission4);
+        //$role3->givePermissionTo($permission5);
+//
+        //$role2->givePermissionTo($permission6);
+        //$role3->givePermissionTo($permission6);
+        //$role4->givePermissionTo($permission6);
+        //$role5->givePermissionTo($permission6);
+//
+        //$role2->givePermissionTo($permission7);
+        //$role3->givePermissionTo($permission7);
+        //$role4->givePermissionTo($permission7);
+        //$role5->givePermissionTo($permission7);
+//
+        //$role3->givePermissionTo($permission8);
+        //$role3->givePermissionTo($permission9);
+        //$role3->givePermissionTo($permission10);
+        //$role3->givePermissionTo($permission11);
+        //$role3->givePermissionTo($permission12);
+        //$role3->givePermissionTo($permission13);
+        //$role3->givePermissionTo($permission14);
+//
+        //$role2->givePermissionTo($permission16);
+        //$role3->givePermissionTo($permission16);
+        //$role5->givePermissionTo($permission16);
+//
+        //$role2->givePermissionTo($permission17);
+        //$role3->givePermissionTo($permission17);
+        //$role5->givePermissionTo($permission17);
+//
+        //$role2->givePermissionTo($permission18);
+        //$role3->givePermissionTo($permission18);
+        //$role5->givePermissionTo($permission18);
+//
+        //$role2->givePermissionTo($permission19);
+        //$role3->givePermissionTo($permission19);
+        //$role5->givePermissionTo($permission19);
+//
+        //$role2->givePermissionTo($permission20);
+        //$role3->givePermissionTo($permission20);
+        //$role5->givePermissionTo($permission20);
+//
+        //$role2->givePermissionTo($permission21);
+        //$role3->givePermissionTo($permission21);
+        //$role5->givePermissionTo($permission21);
+//
+        //$role2->givePermissionTo($permission22);
+        //$role3->givePermissionTo($permission22);
+        //$role5->givePermissionTo($permission22);
+//
+        //$role2->givePermissionTo($permission23);
+        //$role3->givePermissionTo($permission23);
+        //$role5->givePermissionTo($permission23);
 
+        //$role2->givePermissionTo($permission24);
+        //$role3->givePermissionTo($permission24);
+        //$role5->givePermissionTo($permission24);
+//
+        //$role2->givePermissionTo($permission25);
+        //$role3->givePermissionTo($permission25);
+        //$role5->givePermissionTo($permission25);
+//
+        //$role3->givePermissionTo($permission26);
+        //$role3->givePermissionTo($permission27);
+        echo('listo');
     }
 }
