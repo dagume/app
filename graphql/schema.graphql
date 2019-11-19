@@ -6,7 +6,7 @@ scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 
 type Query {
     #me
-    me: Contact @auth(guard: "api")
+    me: Contact @auth(guard:"api")
     #Query proyectos
     filter_name_Project(name: String! @where(operator: "like")): [Project] @all(model: "App\\Project") #@middleware(checks:["auth:api"])
     project(name: String @eq id:ID @eq): Project @find(model: "App\\Project") #@middleware(checks:["auth:api"])
