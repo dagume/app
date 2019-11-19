@@ -6,6 +6,7 @@ use App\Member;
 use GraphQL\Type\Definition\ResolveInfo;
 use DB;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
+use Spatie\Permission\Models\Role;
 
 class Member_has_project
 {
