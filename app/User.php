@@ -4,6 +4,7 @@ namespace App;
 
 use Laravel\Passport\HasApiTokens;
 use Caffeinated\Shinobi\Concerns\HasRolesAndPermissions;
+use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -42,9 +43,9 @@ class User extends Authenticatable
     {
         return $this->BelongsTo(User::class, 'parent_contact_id');
     }
-    public function members()
+    public function roles()
     {
-        return $this->belongsToMany(Member::class, 'members', 'contact_id', 'role_id')->withTimestamps();
+        return $this->belongsToMany(Role::class, 'members', 'contact_id', 'role_id')->withTimestamps();
     }
     //public function members()
     //{

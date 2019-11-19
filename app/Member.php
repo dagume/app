@@ -24,15 +24,15 @@ class Member extends Model
 
     public function project()
     {
-        return $this->belongsTo('App\Project', 'id_project', 'id_project');
+        return $this->belongsTo('App\Project');
     }
     public function contact()
     {
-        return $this->belongsTo('App\User', 'contact_id', 'contact_id');
+        return $this->belongsTo('App\User');
     }
     public function role()
     {
-        return $this->belongsTo(Role::class)->withTimestamps();
+        return $this->belongsTo(Role::class);
     }
 
 }
