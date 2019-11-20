@@ -47,10 +47,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class, 'members', 'contact_id', 'role_id')->withTimestamps();
     }
-    //public function members()
-    //{
-    //    return $this->hasMany('App\Member', 'contact_id', 'id');
-    //}
+    public function members()
+    {
+        return $this->hasMany('App\Member', 'contact_id', 'id');
+    }
     public function orders()
     {
         return $this->hasMany('App\Order', 'contact_id', 'id');

@@ -27,13 +27,13 @@ class Activity extends Model
         'is_added'
     ];
 
-    public function project()
-    {
-        return $this->belongsTo('App\Project');
-    }
+    //public function project()
+    //{
+    //    return $this->belongsTo('App\Project');
+    //}
     public function activities()
     {
-        return $this->hasMany('App\Activity');
+        return $this->hasMany('App\Activity', 'parent_activity_id');
     }
 
 
