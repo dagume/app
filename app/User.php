@@ -7,10 +7,11 @@ use Caffeinated\Shinobi\Concerns\HasRolesAndPermissions;
 use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-
 class User extends Authenticatable
 {
     use HasApiTokens, Notifiable, HasRolesAndPermissions;
+
+    protected $guard = 'web';
 
     protected  $table= 'contacts';
 
