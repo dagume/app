@@ -24,7 +24,9 @@ class Activity extends Model
         'priority',
         'notes',
         'amount',
-        'is_added'
+        'is_added',
+        'is_folder',
+        'drive_id'
     ];
 
     //public function project()

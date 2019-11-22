@@ -129,7 +129,7 @@ class RolesController extends Controller
         //$role2->givePermissionTo($permission19);
         //$role3->givePermissionTo($permission19);
         //$role5->givePermissionTo($permission19);
-//
+
         //$role2->givePermissionTo($permission20);
         //$role3->givePermissionTo($permission20);
         //$role5->givePermissionTo($permission20);
@@ -145,7 +145,6 @@ class RolesController extends Controller
         //$role2->givePermissionTo($permission23);
         //$role3->givePermissionTo($permission23);
         //$role5->givePermissionTo($permission23);
-
         //$role2->givePermissionTo($permission24);
         //$role3->givePermissionTo($permission24);
         //$role5->givePermissionTo($permission24);

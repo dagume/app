@@ -90,6 +90,7 @@ type Activity { #implements GlobalSearch{
     notes: String
     amount:Int
     is_added:Boolean
+    is_folder:Boolean
 }
 #Categorias
 type Category {#implements GlobalSearch{
@@ -137,7 +138,7 @@ type Member{
     id:ID!
     project:Project!
     contact:Contact!
-    role:Role!
+    role:Role
     hours_week:Int
     hours_month:Int
     state:Int!
@@ -416,7 +417,7 @@ type Mutation {
         delivery_site:String! @rules(apply: ["max:255"])
         sender_data:Int
         email_contacts:[Int]
-    ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateApplication@resolve") @middleware(checks:["auth:api"])
+    ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateApplication@resolve") #@middleware(checks:["auth:api"])
 
     #updateOrder(
     #    id_order:ID! @rules(apply:["required"])
@@ -447,7 +448,10 @@ type Mutation {
         completed:Boolean
         priority:String
         notes:String
-    ): Activity @create(model: "App\\Activity") #@middleware(checks:["auth:api"])
+        amount: Int @rules(apply: ["nullable", "integer"])
+        is_added: Boolean
+        is_folder: Boolean
+    ): MessageSuccess @field(resolver: "App\\GraphQL\\Mutations\\CreateActivity@resolve") #@middleware(checks:["auth:api"])
 
     ##Editar Proyecto
     #updateActivity(

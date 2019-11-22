@@ -2,13 +2,14 @@
 
 namespace App\GraphQL\Mutations;
 
-use App\User;
+use App\Activity;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use DB;
 
-class CreateContact
+class CreateActivity
 {
+
     protected $folder_id    = '1bMApYJYghY6pFbNctOCQ9eFoARq8m20u';
 
     public function __construct(){
@@ -30,27 +31,26 @@ class CreateContact
                 'mimeType' => 'application/vnd.google-apps.folder',
                 'parents' => [$this->folder_id ],
             ]);
-            $contact = new User;
-            $contact->parent_contact_id     =$args['parent_contact_id'];
-            $contact->type                  =$args['type'];
-            $contact->name                  =$args['name'];
-            $contact->lastname              =$args['lastname'];
-            $contact->identification_type   =$args['identification_type'];
-            $contact->identification_number =$args['identification_number'];
-            $contact->email                 =$args['email'];
-            $contact->phones                =$args['phones'];
-            $contact->state                 =$args['state'];
-            $contact->city                  =$args['city'];
-            $contact->locate                =$args['locate'];
-            $contact->address               =$args['address'];
-            $contact->web_site              =$args['web_site'];
-            $contact->password              =$args['password'];
+            $activity = new Activity;
+            $activity->project_id           = $args['project_id'];
+            $activity->parent_activity_id   = $args['parent_activity_id'];
+            $activity->name                 = $args['name'];
+            $activity->description          = $args['description'];
+            $activity->date_start           = $args['date_start'];
+            $activity->date_end             = $args['date_end'];
+            $activity->state                = $args['state'];
+            $activity->completed            = $args['completed'];
+            $activity->priority             = $args['priority'];
+            $activity->notes                = $args['notes'];
+            $activity->amount               = $args['amount'];
+            $activity->is_added             = $args['is_added'];
+            $activity->is_folder            = $args['is_folder'];
             $folder = Conection_Drive()->files->create($fileMetadata, ['fields' => 'id']);
-            $contact->folder_id             =$folder->id;
-            $contact->save();
+            $activity->drive_id             = $folder->id;
+            $activity->save();
         }, 3);
         return [
-            'message' => 'Contacto creado exitosamente'
+            'message' => 'Actividad creada'
         ];
     }
 }
