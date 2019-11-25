@@ -12,12 +12,10 @@ return [
     | as required, but they're a perfect start for most applications.
     |
     */
-
     'defaults' => [
         'guard' => 'web',
         'passwords' => 'users',
     ],
-
     /*
     |--------------------------------------------------------------------------
     | Authentication Guards
@@ -34,13 +32,15 @@ return [
     | Supported: "session", "token"
     |
     */
-
     'guards' => [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
         ],
-
+        'web' => [
+            'driver' => 'session',
+            'provider' => 'members',
+        ],
         'api' => [
             'driver' => 'passport',
             'provider' => 'users',
@@ -74,13 +74,11 @@ return [
             'driver' => 'eloquent',
             'model' => App\Member::class,
         ],
-
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
     ],
-
     /*
     |--------------------------------------------------------------------------
     | Resetting Passwords
@@ -95,7 +93,6 @@ return [
     | they have less time to be guessed. You may change this as needed.
     |
     */
-
     'passwords' => [
         'users' => [
             'provider' => 'users',
@@ -103,5 +100,4 @@ return [
             'expire' => 60,
         ],
     ],
-
 ];
